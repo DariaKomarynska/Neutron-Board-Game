@@ -1,4 +1,5 @@
 from classFigure import Figure
+from errors import MoveEmptyError
 
 
 class Empty:
@@ -7,7 +8,6 @@ class Empty:
     """
 
     CODE = "empty"
-    # figure = Figure.EMPTY
 
     def __init__(self):
         self._figure = Figure.EMPTY
@@ -16,7 +16,7 @@ class Empty:
         return self._figure
 
     def get_moves(self, board, x, y):
-        raise Exception("INCORRECT CHOICE")
+        raise MoveEmptyError("INCORRECT CHOICE")
 
     def __str__(self):
         return " o"
