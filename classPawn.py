@@ -80,13 +80,14 @@ class Pawn:
     def check_vertically_down(self, board, x, y):
         return self.check_horizontally_vertically(board, x, y, 0, 1)
 
-    def check_diagonally_down_left_or_right(self, board, x, y, direction):
+    def check_diagonally_up_down_left_right(self, board, x, y, updown, direction):
         """
-        Diagonally down left (-1) or right (1)
+        Diagonally down (y + 1):  left (-1) or right (1)
+        Diagonally up   (y - 1):  left (-1) or right (1)
         """
         temp_moves = []
         j = x + direction
-        i = y + 1
+        i = y + updown
         while 1 <= i <= 5 and 1 <= j <= 5:
             figure = board.get_figure(j, i)
             if j == x and i == y:
@@ -97,7 +98,7 @@ class Pawn:
                 break
             temp_moves.append([j, i])
             j += direction
-            i += 1
+            i += updown
         if len(temp_moves) != 0:
             new = []
             for i in range(len(temp_moves)):
@@ -109,44 +110,16 @@ class Pawn:
                     return move
 
     def check_diagonally_down_left(self, board, x, y):
-        return self.check_diagonally_down_left_or_right(board, x, y, -1)
+        return self.check_diagonally_up_down_left_right(board, x, y, 1, -1)
 
     def check_diagonally_down_right(self, board, x, y):
-        return self.check_diagonally_down_left_or_right(board, x, y, 1)
-
-    def check_diagonally_up_left_or_right(self, board, x, y, direction):
-        """
-        Diagonally up left (-1) or right (1)
-        """
-        temp_moves = []
-        j = x + direction
-        i = y - 1
-        while 1 <= i <= 5 and 1 <= j <= 5:
-            figure = board.get_figure(j, i)
-            if j == x and i == y:
-                break
-            if figure == self._figure:
-                break
-            if figure != Figure.EMPTY:
-                break
-            temp_moves.append([j, i])
-            j += direction
-            i -= 1
-        if len(temp_moves) != 0:
-            new = []
-            for i in range(len(temp_moves)):
-                find = temp_moves[i][0]
-                new.append(find)
-            a = min(new) if direction == -1 else max(new)
-            for move in temp_moves:
-                if move[0] == a:
-                    return move
+        return self.check_diagonally_up_down_left_right(board, x, y, 1, 1)
 
     def check_diagonally_up_left(self, board, x, y):
-        return self.check_diagonally_up_left_or_right(board, x, y, -1)
+        return self.check_diagonally_up_down_left_right(board, x, y, -1, -1)
 
     def check_diagonally_up_right(self, board, x, y):
-        return self.check_diagonally_up_left_or_right(board, x, y, 1)
+        return self.check_diagonally_up_down_left_right(board, x, y, -1, 1)
 
     def get_moves(self, board, x, y):
         temp_moves = [
