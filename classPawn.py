@@ -43,76 +43,47 @@ class Pawn:
             if self._figure == Figure.BLACK
             else self.NEUTRON_IMG
         )
-    def check_horizontally_left_or_right(self, board, x, y, direction):
+
+    def check_horizontally_vertically(self, board, x, y, hor_ver, direction):
         """
-        Horizontally left (-1) or right (1)
+        Horizontally - 1: left (-1) or right (1)
+        Vertically   - 0: up (-1)   or down (1)
         """
         temp_moves = []
         j = direction
-        i = x + j
+        i = x + j if hor_ver == 1 else y + j
         while 1 <= i <= 5:
-            figure = board.get_figure(i, y)
+            figure = board.get_figure(i, y) if hor_ver == 1 else board.get_figure(x, i)
             if figure == self._figure:
                 break
             if figure != Figure.EMPTY:
                 break
-            temp_moves.append([i, y])
+            temp_moves.append([i, y]) if hor_ver == 1 else temp_moves.append([x, i])
             i += j
         if len(temp_moves) != 0:
             unique_step = []
             for i in range(len(temp_moves)):
                 find = sum(temp_moves[i])
                 unique_step.append(find)
-            if direction == -1:
-                result = min(temp_moves)
-            elif direction == 1:
-                result = max(temp_moves)
+            result = min(temp_moves) if direction == -1 else max(temp_moves)
             return result
 
     def check_horizontally_left(self, board, x, y):
-        return self.check_horizontally_left_or_right(board, x, y, -1)
+        return self.check_horizontally_vertically(board, x, y, 1, -1)
 
     def check_horizontally_right(self, board, x, y):
-        return self.check_horizontally_left_or_right(board, x, y, 1)
-
-    def check_vertically_up_or_down(self, board, x, y, direction):
-        """
-        Vertically up (-1) or down (1)
-        """
-        moves = []
-        temp_moves = []
-        j = direction
-        i = y + j
-        while 1 <= i <= 5:
-            figure = board.get_figure(x, i)
-            if figure == self._figure:
-                break
-            if figure != Figure.EMPTY:
-                break
-            temp_moves.append([x, i])
-            i += j
-        if len(temp_moves) != 0:
-            unique_step = []
-            for i in range(len(temp_moves)):
-                find = sum(temp_moves[i])
-                unique_step.append(find)
-            if direction == -1:
-                result = min(temp_moves)
-            elif direction == 1:
-                result = max(temp_moves)
-            return result
+        return self.check_horizontally_vertically(board, x, y, 1, 1)
 
     def check_vertically_up(self, board, x, y):
-        return self.check_vertically_up_or_down(board, x, y, -1)
+        return self.check_horizontally_vertically(board, x, y, 0, -1)
 
     def check_vertically_down(self, board, x, y):
-        return self.check_vertically_up_or_down(board, x, y, 1)
+        return self.check_horizontally_vertically(board, x, y, 0, 1)
 
     def check_diagonally_down_left_or_right(self, board, x, y, direction):
         """
         Diagonally down left (-1) or right (1)
         """
-        moves = []
         temp_moves = []
         j = x + direction
         i = y + 1
@@ -147,7 +118,6 @@ class Pawn:
         """
         Diagonally up left (-1) or right (1)
         """
-        moves = []
         temp_moves = []
         j = x + direction
         i = y - 1
