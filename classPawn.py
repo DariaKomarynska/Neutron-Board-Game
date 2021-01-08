@@ -1,4 +1,5 @@
 from classFigure import Figure
+from errors import NotIntegerError, IncorrectNumberError
 
 
 class Pawn:
@@ -13,8 +14,16 @@ class Pawn:
 
     def __init__(self, figure, row, column):
         self._figure = figure
-        self._row = row
-        self._column = column
+        self._row = int(row)
+        self._column = int(column)
+        if (
+            (type(row) is not int)
+            or (type(column) is not int)
+            or (type(figure) is not int)
+        ):
+            raise NotIntegerError("Write integer")
+        if not 1 <= row <= 5 or not 1 <= column <= 5:
+            raise IncorrectNumberError("It has to be from 1 to 5")
 
     def figure(self):
         return self._figure
