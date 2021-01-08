@@ -1,3 +1,3 @@
 # NEUTRON
 
-The Game of Neutro!
+The Game of Neutron
