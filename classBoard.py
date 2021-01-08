@@ -12,9 +12,10 @@ class Board:
         white = Figure.WHITE
         neutron = Figure.NEUTRON
         # Start position on the board.
-        for j in range(6):
-            self._board[1][j] = Pawn(black, 1, j)
-            self._board[5][j] = Pawn(white, 5, j)
+        for j in range(1, 6):
+            self._board[1][j] = Pawn(black, j, 1)
+            self._board[5][j] = Pawn(white, j, 5)
+        for j in range(1, 6):
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
