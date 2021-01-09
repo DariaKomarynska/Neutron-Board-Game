@@ -199,3 +199,25 @@ def test_check_pawn_not_zero_moves_black_true():
     xyFrom = [2, 1]
     result = board.check_pawn_not_zero_moves(figure, xyFrom)
     assert result == True
+
+
+def test_choose_correct_fromXY_white(monkeypatch):
+    board = Board()
+    monkeypatch.setattr('builtins.input', lambda _: "1 5")
+    result = board.choose_correct_fromXY(Figure.WHITE)
+    assert result == [1, 5]
+
+
+def test_choose_correct_fromXY_black(monkeypatch):
+    board = Board()
+    monkeypatch.setattr('builtins.input', lambda _: "3 1")
+    result = board.choose_correct_fromXY(Figure.BLACK)
+    assert result == [3, 1]
+
+
+def test_choose_correct_fromXY_neutron():
+    board = Board()
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[2][4] = Pawn(3, 4, 2)
+    result = board.choose_correct_fromXY(Figure.NEUTRON)
+    assert result == [4, 2]

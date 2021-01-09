@@ -54,8 +54,6 @@ class Board:
     def input_coordinates(self):
         # Enter list of two numbers for x and y with space.
         XY = list((input("From X Y: ")).split())
-        # XY[0] = int(XY[0])
-        # XY[1] = int(XY[1])
         return XY
 
     def start_xy_for_neutron(self, figure):
@@ -82,7 +80,7 @@ class Board:
         ):
             # Check number of input elements
             # Check: is input element digit?
-            print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
+            print("Try again")
             return False
         else:
             coordinates[0] = int(coordinates[0])
@@ -105,8 +103,24 @@ class Board:
             return False
         return True
 
-    # def enter_coordinates2(self, figure):
-    #     pass
+    def choose_correct_fromXY(self, figure):
+        quit = True
+        if self.start_xy_for_neutron(figure) is not False:
+            fromXY = self.start_xy_for_neutron(figure)
+            if not self.check_pawn_not_zero_moves(figure, fromXY):
+                return False
+
+        else:
+            while quit:
+                fromXY = self.input_coordinates()
+                if (
+                    self.check_given_coordinates(fromXY)
+                    and self.check_choosen_figure_on_the_board(figure, fromXY[0], fromXY[1])
+                    and self.check_pawn_not_zero_moves(figure, fromXY)
+                ):
+                    quit = False
+                    break
+        return fromXY
 
 
     def enter_coordinates(self, figure):
@@ -115,6 +129,7 @@ class Board:
         Input x and y shoud be checked.
         Do choosen x, y (from) belong to player's figure?
         Are choosen x, y (to) possible to stand here?
+        If yes - move pawn.
         """
         correct_xy = True
         flag = True

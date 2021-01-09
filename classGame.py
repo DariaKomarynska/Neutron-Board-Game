@@ -151,6 +151,7 @@ class Game:
         white_won_hard = "Player-1 has fallen into a trap and cannot move Neutron\
                     \n🟣 Player-1 🟣 is Looser\
                     \n🟡 Player-2 🟡 is WINNER"
+        print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
         while quit is True:
             print()
             if version == 2 or version == 3:
