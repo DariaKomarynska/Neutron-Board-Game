@@ -333,19 +333,20 @@ class Board:
 
         for j in range(1, 6):
             if self._board[1][j]._figure == Figure.NEUTRON:
+                # ver - version of the game
                 if ver == 23:
-                    print("🟡 Player-1🟡 is Looser")
-                    print("🟣 Player-2🟣 is Winner")
+                    print("🟡 Player-1 🟡 is Looser")
+                    print("🟣 Player-2 🟣 is Winner")
                     return True
                 else:
-                    print("🟡 Player-2🟡 is Looser")
-                    print("🟣 Player-1🟣 is Winner")
+                    print("🟡 Player-2 🟡 is Looser")
+                    print("🟣 Player-1 🟣 is Winner")
                     return True
             elif self._board[5][j]._figure == Figure.NEUTRON:
                 if ver == 23:
-                    print("🟣 Player-2🟣 is Looser", "\n🟡 Player-1🟡 is WINNER")
+                    print("🟣 Player-2 🟣 is Looser", "\n🟡 Player-1 🟡 is WINNER")
                     return True
                 else:
-                    print("🟣 Player-1🟣 is Looser")
-                    print("🟡 Player-2🟡 is Winner")
+                    print("🟣 Player-1 🟣 is Looser")
+                    print("🟡 Player-2 🟡 is Winner")
                     return True
