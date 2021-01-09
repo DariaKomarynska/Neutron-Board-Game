@@ -28,21 +28,174 @@ def test_get_pawn_moves():
     assert board.get_pawn(1, 5).get_moves(board, 1, 5) == board.get_pawn_moves(1, 5)
 
 
-def test_check_given_coordinates_true():
+def test_check_choosen_figure_true():
     board = Board()
-    assert board.check_given_coordinates(1, 4, 1) == True
+    result = board.check_choosen_figure_on_the_board(1, 4, 1)
+    assert result == True
 
 
-def test_check_given_coordinates_false_not_black():
+def test_check_choosen_figure_false_not_black():
     board = Board()
-    assert board.check_given_coordinates(2, 4, 1) == False
+    result = board.check_choosen_figure_on_the_board(2, 4, 1)
+    assert result == False
 
 
-def test_check_given_coordinates_false_empty():
+def test_check_choosen_figure_false_empty():
     board = Board()
-    assert board.check_given_coordinates(2, 4, 2) == False
+    result = board.check_choosen_figure_on_the_board(2, 4, 2)
+    assert result == False
 
 # def test_game_over():
 #     board = Board()
 #     board._board[1][3]._figure == Figure.NEUTRON
 #     assert board.game_over(23) == True
+
+def test_input_coordinates(monkeypatch):
+    board = Board()
+    monkeypatch.setattr('builtins.input', lambda _: "1 5")
+    result = board.input_coordinates()
+    assert result == ["1", "5"]
+
+
+def test_start_xy_for_neutron_correct():
+    board = Board()
+    figure = Figure.NEUTRON
+    coordinates = board.start_xy_for_neutron(figure)
+    assert coordinates == [3, 3]
+
+
+def test_start_xy_for_neutron_black():
+    board = Board()
+    figure = Figure.BLACK
+    coordinates = board.start_xy_for_neutron(figure)
+    assert coordinates == False
+
+
+def test_start_xy_for_neutron_another():
+    board = Board()
+    board._board[4][2] = Pawn(3, 2, 4)
+    board._board[3][3] = Empty()
+    figure = Figure.NEUTRON
+    coordinates = board.start_xy_for_neutron(figure)
+    assert coordinates == [2, 4]
+
+
+def test_give_possible_moves_pawn1():
+    board = Board()
+    start_XY = [1, 5]
+    result = board.give_possible_moves(start_XY)
+    assert result == "Your possible moves: [[1, 2], [2, 4]]"
+
+
+def test_give_possible_moves_pawn2():
+    board = Board()
+    board._board[1][4] = Empty()
+    board._board[3][3] = Empty()
+    board._board[5][1] = Empty()
+    board._board[4][4] = Pawn(1, 4, 4)
+    board._board[4][2] = Pawn(2, 2, 4)
+    board._board[4][5] = Pawn(3, 5, 4)
+    start_XY = [3, 5]
+    result = board.give_possible_moves(start_XY)
+    assert result == "Your possible moves: [[3, 2]]"
+
+
+def test_check_given_coordinates():
+    board = Board()
+    XY = ["4", "5"]
+    result = board.check_given_coordinates(XY)
+    assert result == True
+
+
+def test_check_given_coordinates_x_incorrect():
+    board = Board()
+    XY = ["8", "5"]
+    result = board.check_given_coordinates(XY)
+    assert result == False
+
+
+def test_check_given_coordinates_too_much_elements():
+    board = Board()
+    XY = ["3", "hello", "5"]
+    result = board.check_given_coordinates(XY)
+    assert result == False
+
+
+def test_check_given_coordinates_not_isdigit():
+    board = Board()
+    XY = ["hello", "5"]
+    result = board.check_given_coordinates(XY)
+    assert result == False
+
+
+def test_check_xyTo_in_possible_moves():
+    board = Board()
+    xyFrom = [1, 5]
+    xyTo = [2, 4]
+    result = board.check_xyTo_in_possible_moves(xyFrom, xyTo)
+    assert result == True
+
+
+def test_check_xyTo_in_possible_moves():
+    board = Board()
+    xyFrom = [1, 5]
+    xyTo = [5, 3]
+    result = board.check_xyTo_in_possible_moves(xyFrom, xyTo)
+    assert result == False
+
+
+def test_check_pawn_not_zero_moves_black_false():
+    board = Board()
+    board._board[1][1] = Empty()
+    board._board[5][1] = Empty()
+    board._board[5][2] = Empty()
+    board._board[5][3] = Empty()
+    board._board[5][5] = Empty()
+    board._board[2][2] = Pawn(1, 2, 2)
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[3][2] = Pawn(2, 2, 3)
+    board._board[3][4] = Pawn(2, 4, 3)
+    board._board[2][4] = Pawn(2, 4, 2)
+    board._board[2][3] = Pawn(3, 3, 2)
+    figure = Figure.BLACK
+    xyFrom = [3, 1]
+    result = board.check_pawn_not_zero_moves(figure, xyFrom)
+    assert result == False
+
+
+def test_check_pawn_not_zero_moves_neutron_false():
+    board = Board()
+    board._board[1][1] = Empty()
+    board._board[5][1] = Empty()
+    board._board[5][2] = Empty()
+    board._board[5][3] = Empty()
+    board._board[5][5] = Empty()
+    board._board[2][2] = Pawn(1, 2, 2)
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[3][2] = Pawn(2, 2, 3)
+    board._board[3][4] = Pawn(2, 4, 3)
+    board._board[2][4] = Pawn(2, 4, 2)
+    board._board[2][3] = Pawn(3, 3, 2)
+    figure = Figure.NEUTRON
+    xyFrom = [3, 2]
+    result = board.check_pawn_not_zero_moves(figure, xyFrom)
+    assert result == False
+
+
+def test_check_pawn_not_zero_moves_black_true():
+    board = Board()
+    board._board[1][1] = Empty()
+    board._board[5][1] = Empty()
+    board._board[5][2] = Empty()
+    board._board[5][3] = Empty()
+    board._board[5][5] = Empty()
+    board._board[2][2] = Pawn(1, 2, 2)
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[3][2] = Pawn(2, 2, 3)
+    board._board[3][4] = Pawn(2, 4, 3)
+    board._board[2][4] = Pawn(2, 4, 2)
+    board._board[2][3] = Pawn(3, 3, 2)
+    figure = Figure.BLACK
+    xyFrom = [2, 1]
+    result = board.check_pawn_not_zero_moves(figure, xyFrom)
+    assert result == True

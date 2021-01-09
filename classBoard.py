@@ -51,6 +51,64 @@ class Board:
     def is_empty(self, x, y):
         return self.get_pawn(x, y).CODE == "empty"
 
+    def input_coordinates(self):
+        # Enter list of two numbers for x and y with space.
+        XY = list((input("From X Y: ")).split())
+        # XY[0] = int(XY[0])
+        # XY[1] = int(XY[1])
+        return XY
+
+    def start_xy_for_neutron(self, figure):
+        if figure == Figure.NEUTRON:
+                # If figure is Neutron: don't ask fromXY, take from the board
+                for j in range(1, 6):
+                    for i in range(1, 6):
+                        if self._board[j][i]._figure == figure:
+                            fromXY = [i, j]
+                            return fromXY
+        else:
+            return False
+
+    def give_possible_moves(self, start_XY):
+        possible_moves = self.get_pawn_moves(start_XY[0], start_XY[1])
+        print("HINTS")
+        # Here is a list of possible moves for certain figure.
+        return(f"Your possible moves: {possible_moves}")
+
+    def check_given_coordinates(self, coordinates):
+        if (
+            (len(coordinates) != 2)
+            or (not coordinates[0].isdigit() or not coordinates[1].isdigit())
+        ):
+            # Check number of input elements
+            # Check: is input element digit?
+            print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
+            return False
+        else:
+            coordinates[0] = int(coordinates[0])
+            coordinates[1] = int(coordinates[1])
+            if coordinates[0] not in range(1, 6) or coordinates[1] not in range(1, 6):
+                # Check: is input element 1,2,3,4,5?
+                return False
+            return True
+
+    def check_xyTo_in_possible_moves(self, xyFrom, xyTo):
+        # Do chooosen elements belong to list of possible moves?
+        if self.get_pawn_moves(xyFrom[0], xyFrom[1]).count(xyTo) == 1:
+            return True
+        return False
+
+    def check_pawn_not_zero_moves(self, figure, xyFrom):
+        if len(self.get_pawn_moves(xyFrom[0], xyFrom[1])) == 0:
+            if figure != Figure.NEUTRON:
+                print("Choose another pawn")
+            return False
+        return True
+
+    # def enter_coordinates2(self, figure):
+    #     pass
+
+
     def enter_coordinates(self, figure):
         """
         Player should enter coordinates for moving pawn.
@@ -99,11 +157,11 @@ class Board:
 
             if correct_xy is False:
                 # Check: does choosen element belong to correct figure?
-                if self.check_given_coordinates(figure, fromXY[0], fromXY[1]):
+                if self.check_choosen_figure_on_the_board(figure, fromXY[0], fromXY[1]):
                     #
                     correct_xy = False
 
-                if not self.check_given_coordinates(figure, fromXY[0], fromXY[1]):
+                if not self.check_choosen_figure_on_the_board(figure, fromXY[0], fromXY[1]):
                     print("Enter correct X Y")
                     correct_xy = True
             if correct_xy is False:
@@ -174,7 +232,7 @@ class Board:
         if flag is True:
             self.move_pawns(fromXY, toXY)
 
-    def check_given_coordinates(self, figure, x, y):
+    def check_choosen_figure_on_the_board(self, figure, x, y):
         """
         Check input coordinates for certain figure.
         """
@@ -192,7 +250,7 @@ class Board:
 
         while flag:
             from_xy = choices(possible, k=2)
-            if self.check_given_coordinates(figure, from_xy[0], from_xy[1]):
+            if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
                 flag = False
 
             if flag is False:
@@ -233,7 +291,7 @@ class Board:
         quit = True
         while correct_xy and flag:
             from_xy = choices(possible, k=2)
-            if self.check_given_coordinates(figure, from_xy[0], from_xy[1]):
+            if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
                 if figure == Figure.NEUTRON:
                     if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
                         # If neutron cannot move - game over
