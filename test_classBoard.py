@@ -248,3 +248,14 @@ def test_random_to_xy_black(monkeypatch):
     monkeypatch.setattr('classBoard.choices', new_result)
     result = board.random_toXY(Figure.WHITE, [4, 5])
     assert result == [4, 2]
+
+
+def test_random_to_xy_neutron(monkeypatch):
+    board = Board()
+
+    def new_result(a, k):
+        res = [1, 3]
+        return res
+    monkeypatch.setattr('classBoard.choices', new_result)
+    result = board.random_toXY(Figure.NEUTRON, [3, 3])
+    assert result == [1, 3]

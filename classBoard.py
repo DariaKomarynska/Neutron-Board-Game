@@ -215,45 +215,6 @@ class Board:
         print(self.get_pawn_moves(from_XY[0], from_XY[1]))
         self.move_pawns(from_XY, to_XY)
 
-    def random_opponent_coordinates5(self, figure):
-        """
-        Computer chooses random coordinates for "From X Y" and "To X Y".
-        """
-        possible = [1, 2, 3, 4, 5]
-        flag = True
-        while flag:
-            from_xy = choices(possible, k=2)
-            if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
-                flag = False
-
-            if flag is False:
-                if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0 and (
-                    figure == Figure.WHITE or figure == Figure.BLACK
-                ):
-                    flag = True
-                    continue
-                else:
-                    flag = False
-                    break
-
-        while flag is False:
-            if len(self.get_pawn_moves(from_xy[0], from_xy[1])) != 0:
-                flag = True
-                break
-            else:
-                flag = False
-                break
-        while flag:
-            to_xy = choices(possible, k=2)
-            if self.get_pawn_moves(from_xy[0], from_xy[1]).count(to_xy) == 1:
-                break
-        if flag is False:
-            return False
-        if flag is True:
-            print(from_xy)
-            print(self.get_pawn_moves(from_xy[0], from_xy[1]))
-            self.move_pawns(from_xy, to_xy)
-
     def hard_opponent_coordinates(self, figure):
         """
         Computer chooses best coordinates for "From X Y" and "To X Y".
