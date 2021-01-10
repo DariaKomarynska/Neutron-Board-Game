@@ -1,7 +1,7 @@
 from classEmpty import Empty
 from classFigure import Figure
 from classPawn import Pawn
-from random import choices
+from random import choice
 
 
 class Board:
@@ -13,15 +13,15 @@ class Board:
         neutron = Figure.NEUTRON
         # Start position on the board.
         for j in range(1, 6):
-            # self._board[1][j] = Pawn(black, j, 1)
+            self._board[1][j] = Pawn(black, j, 1)
             self._board[5][j] = Pawn(white, j, 5)
         for j in range(1, 6):
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
-        self._board[5][2] = Empty()
-        self._board[1][2] = Pawn(black, 3, 3)
-        self._board[1][4] = Pawn(black, 3, 3)
+        # self._board[5][2] = Empty()
+        # self._board[1][2] = Pawn(black, 3, 3)
+        # self._board[1][4] = Pawn(black, 3, 3)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -173,38 +173,29 @@ class Board:
         self.move_pawns(fromXY, toXY)
 
     def random_fromXY(self, figure):
-        possible = [1, 2, 3, 4, 5]
+        possible = self.get_list_of_pawns(figure)
         quit = True
         while quit:
-            from_xy = choices(possible, k=2)
-            if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
+            from_xy = choice(possible)
+            possible.remove(from_xy)
+            if len(self.get_pawn_moves(from_xy[0], from_xy[1])) != 0:
                 quit = False
-                if len(self.get_pawn_moves(from_xy[0], from_xy[1])) != 0:
-                    quit = False
-                    break
-                elif (
-                    len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0
-                    and figure == Figure.NEUTRON
-                ):
-                    return False
-                else:
-                    quit = True
-                    continue
+                break
+            elif (
+                len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0
+                and figure == Figure.NEUTRON
+            ):
+                return False
             else:
                 quit = True
                 continue
+
         return from_xy
 
     def random_toXY(self, figure, from_xy):
-        possible = [1, 2, 3, 4, 5]
-        quit = True
-        while quit:
-            to_xy = choices(possible, k=2)
-            if self.check_xyTo_in_possible_moves(from_xy, to_xy):
-                return to_xy
-            else:
-                quit = True
-                continue
+        possible = self.get_pawn_moves(from_xy[0], from_xy[1])
+        to_xy = choice(possible)
+        return to_xy
 
     def random_opponent_coordinates(self, figure):
         """
@@ -215,6 +206,7 @@ class Board:
             return False
         to_XY = self.random_toXY(figure, from_XY)
         print(from_XY)
+        print(self.get_list_of_pawns(figure))
         print(self.get_pawn_moves(from_XY[0], from_XY[1]))
         self.move_pawns(from_XY, to_XY)
 

@@ -220,10 +220,10 @@ def test_choose_correct_fromXY_neutron():
 def test_random_fromXY_black(monkeypatch):
     board = Board()
 
-    def new_result(a, k):
+    def new_result(a):
         res = [3, 1]
         return res
-    monkeypatch.setattr('classBoard.choices', new_result)
+    monkeypatch.setattr('classBoard.choice', new_result)
     result = board.random_fromXY(Figure.BLACK)
     assert result == [3, 1]
 
@@ -231,10 +231,10 @@ def test_random_fromXY_black(monkeypatch):
 def test_random_fromXY_white(monkeypatch):
     board = Board()
 
-    def new_result(a, k):
+    def new_result(a):
         res = [4, 5]
         return res
-    monkeypatch.setattr('classBoard.choices', new_result)
+    monkeypatch.setattr('classBoard.choice', new_result)
     result = board.random_fromXY(Figure.WHITE)
     assert result == [4, 5]
 
@@ -242,10 +242,10 @@ def test_random_fromXY_white(monkeypatch):
 def test_random_to_xy_black(monkeypatch):
     board = Board()
 
-    def new_result(a, k):
+    def new_result(a):
         res = [4, 2]
         return res
-    monkeypatch.setattr('classBoard.choices', new_result)
+    monkeypatch.setattr('classBoard.choice', new_result)
     result = board.random_toXY(Figure.WHITE, [4, 5])
     assert result == [4, 2]
 
@@ -253,10 +253,10 @@ def test_random_to_xy_black(monkeypatch):
 def test_random_to_xy_neutron(monkeypatch):
     board = Board()
 
-    def new_result(a, k):
+    def new_result(a):
         res = [1, 3]
         return res
-    monkeypatch.setattr('classBoard.choices', new_result)
+    monkeypatch.setattr('classBoard.choice', new_result)
     result = board.random_toXY(Figure.NEUTRON, [3, 3])
     assert result == [1, 3]
 
@@ -264,5 +264,10 @@ def test_random_to_xy_neutron(monkeypatch):
 def test_get_list_of_pawns():
     board = Board()
     figure = Figure.BLACK
+    board._board[1][1] = Empty()
+    board._board[1][3] = Empty()
+    board._board[1][5] = Empty()
+    board._board[1][2] = Pawn(1, 3, 3)
+    board._board[1][4] = Pawn(1, 3, 3)
     result = board.get_list_of_pawns(figure)
     assert result == [[2, 1], [4, 1]]
