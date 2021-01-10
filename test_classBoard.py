@@ -50,6 +50,7 @@ def test_check_choosen_figure_false_empty():
 #     board._board[1][3]._figure == Figure.NEUTRON
 #     assert board.game_over(23) == True
 
+
 def test_input_coordinates(monkeypatch):
     board = Board()
     monkeypatch.setattr('builtins.input', lambda _: "1 5")
@@ -121,20 +122,20 @@ def test_check_given_coordinates_not_isdigit():
     assert result == False
 
 
-def test_check_xyTo_in_possible_moves():
+def test_check_xyTo_in_possible_moves_true():
     board = Board()
     xyFrom = [1, 5]
     xyTo = [2, 4]
     result = board.check_xyTo_in_possible_moves(xyFrom, xyTo)
-    assert result == True
+    assert result is True
 
 
-def test_check_xyTo_in_possible_moves():
+def test_check_xyTo_in_possible_moves_false():
     board = Board()
     xyFrom = [1, 5]
     xyTo = [5, 3]
     result = board.check_xyTo_in_possible_moves(xyFrom, xyTo)
-    assert result == False
+    assert result is False
 
 
 def test_check_pawn_not_zero_moves_black_false():
@@ -216,8 +217,23 @@ def test_choose_correct_fromXY_neutron():
     assert result == [4, 2]
 
 
-# def test_choose_correct_toXY_black(monkeypatch):
-#     board = Board()
-#     monkeypatch.setattr('builtins.input', lambda _: "5 3")
-#     result = board.choose_correct_toXY(Figure.BLACK, [3, 1])
-#     assert result == [5, 3]
+def test_random_fromXY_black(monkeypatch):
+    board = Board()
+
+    def new_result(a, k):
+        res = [3, 1]
+        return res
+    monkeypatch.setattr('classBoard.choices', new_result)
+    result = board.random_fromXY(Figure.BLACK)
+    assert result == [3, 1]
+
+
+def test_random_fromXY_white(monkeypatch):
+    board = Board()
+
+    def new_result(a, k):
+        res = [4, 5]
+        return res
+    monkeypatch.setattr('classBoard.choices', new_result)
+    result = board.random_fromXY(Figure.WHITE)
+    assert result == [4, 5]

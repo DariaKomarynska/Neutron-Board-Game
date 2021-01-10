@@ -105,14 +105,25 @@ class Board:
             return False
         return True
 
+    def check_choosen_figure_on_the_board(self, figure, x, y):
+        """
+        Check input coordinates for certain figure.
+        """
+        choosen_figure = self.get_figure(x, y)
+        if choosen_figure == figure:
+            return True
+        return False
+
     def input_and_check_coordinates(self, figure, from_to):
         quit = True
         while quit:
             coordinates = self.input_coordinates(from_to)
             if (
-                (from_to == 1
-                and self.check_given_coordinates(coordinates)
-                and self.check_choosen_figure_on_the_board(figure, coordinates[0], coordinates[1]))
+                (
+                    from_to == 1
+                    and self.check_given_coordinates(coordinates)
+                    and self.check_choosen_figure_on_the_board(figure, coordinates[0], coordinates[1])
+                )
                 or (from_to == 0 and self.check_given_coordinates(coordinates))
             ):
                 quit = False
@@ -160,138 +171,25 @@ class Board:
         toXY = self.choose_correct_toXY(figure, fromXY)
         self.move_pawns(fromXY, toXY)
 
-    def enter_coordinates5(self, figure):
-        """
-        Player should enter coordinates for moving pawn.
-        Input x and y shoud be checked.
-        Do choosen x, y (from) belong to player's figure?
-        Are choosen x, y (to) possible to stand here?
-        If yes - move pawn.
-        """
-        correct_xy = True
-        flag = True
-        while correct_xy is True and flag is True:
+    def random_fromXY(self, figure):
+        possible = [1, 2, 3, 4, 5]
+        from_xy = choices(possible, k=2)
+        quit = True
+        while quit:
+            if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
 
-            if figure == Figure.NEUTRON:
-                # If figure is Neutron: don't ask fromXY, take from the board
-                for j in range(1, 6):
-                    for i in range(1, 6):
-                        if self._board[j][i]._figure == figure:
-                            fromXY = [i, j]
-                            correct_xy = False
-                break
-            else:
-                # Enter list of two numbers for x and y with space.
-                fromXY = list((input("From X Y: ")).split())
-
-            if len(fromXY) != 2:
-                # Check number of input elements.
-                print("Write X and Y of pawn: two numbers from 1 to 5 with", "SPACE")
-                correct_xy = True
-            else:
-                correct_xy = False
-
-            if correct_xy is False:
-                # Check: is input element digit?
-                if not fromXY[0].isdigit() or not fromXY[1].isdigit():
-                    print("You schould write numbers")
-                    correct_xy = True
-                else:
-                    correct_xy = False
-
-                fromXY[0] = int(fromXY[0])
-                fromXY[1] = int(fromXY[1])
-
-                # Check: is input element 1,2,3,4,5?
-                if fromXY[0] not in range(1, 6) or fromXY[1] not in range(1, 6):
-                    print("You schould write numbers from 1 to 5")
-                    correct_xy = True
-
-            if correct_xy is False:
-                # Check: does choosen element belong to correct figure?
-                if self.check_choosen_figure_on_the_board(figure, fromXY[0], fromXY[1]):
-                    #
-                    correct_xy = False
-
-                if not self.check_choosen_figure_on_the_board(figure, fromXY[0], fromXY[1]):
-                    print("Enter correct X Y")
-                    correct_xy = True
-            if correct_xy is False:
-                if len(self.get_pawn_moves(fromXY[0], fromXY[1])) == 0 and (
-                    figure == Figure.WHITE or figure == Figure.BLACK
+                if len(self.get_pawn_moves(from_xy[0], from_xy[1])) != 0:
+                    quit = False
+                    break
+                elif (
+                    len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0
+                    and figure == Figure.NEUTRON
                 ):
-                    correct_xy = True
-                    flag = True
-                    print("Choose another pawn")
-                    continue
+                    return False
                 else:
-                    correct_xy = False
-                    break
-
-            # Check game over by number of possible moves for Neutron
-        while correct_xy is False:
-            if len(self.get_pawn_moves(fromXY[0], fromXY[1])) != 0:
-                correct_xy = True
-                break
-            else:
-                correct_xy = False
-                flag = False
-                break
-        while correct_xy is True:
-            possible_moves = self.get_pawn_moves(fromXY[0], fromXY[1])
-            print("HINTS")
-            # Here is a list of possible moves for certain figure.
-            print(f"Your possible moves: {possible_moves}")
-
-            # Enter list of two numbers for x and y with space.
-            toXY = list((input("To X Y: ")).split())
-
-            if len(toXY) != 2:
-                # Check number of input elements.
-                print("Enter correctly")
-                correct_xy = True
-            else:
-                correct_xy = False
-
-            if correct_xy is False:
-                # Check: is input element digit?
-                if not toXY[0].isdigit() or not toXY[1].isdigit():
-                    print("Enter numbers")
-                    correct_xy = True
-                else:
-                    correct_xy = False
-
-            if correct_xy is False:
-                toXY[0] = int(toXY[0])
-                toXY[1] = int(toXY[1])
-
-            if correct_xy is False:
-                # Check: is input element 1,2,3,4,5?
-                if toXY[0] not in range(1, 6) or toXY[1] not in range(1, 6):
-                    print("Enter from 1 to 5")
-                    correct_xy = True
-
-            while correct_xy is False:
-                # Do chooosen elements belong to list of possible moves?
-                if self.get_pawn_moves(fromXY[0], fromXY[1]).count(toXY) == 1:
-                    flag = True
-                    break
-                else:
-                    print("Enter correct X Y")
-                    correct_xy = True
-        if flag is False:
-            return False
-        if flag is True:
-            self.move_pawns(fromXY, toXY)
-
-    def check_choosen_figure_on_the_board(self, figure, x, y):
-        """
-        Check input coordinates for certain figure.
-        """
-        choosen_figure = self.get_figure(x, y)
-        if choosen_figure == figure:
-            return True
-        return False
+                    quit = True
+                    # break
+        return from_xy
 
     def random_opponent_coordinates(self, figure):
         """
