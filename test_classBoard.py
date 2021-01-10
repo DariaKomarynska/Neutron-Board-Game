@@ -53,7 +53,7 @@ def test_check_choosen_figure_false_empty():
 def test_input_coordinates(monkeypatch):
     board = Board()
     monkeypatch.setattr('builtins.input', lambda _: "1 5")
-    result = board.input_coordinates()
+    result = board.input_coordinates(0)
     assert result == ["1", "5"]
 
 
@@ -62,13 +62,6 @@ def test_start_xy_for_neutron_correct():
     figure = Figure.NEUTRON
     coordinates = board.start_xy_for_neutron(figure)
     assert coordinates == [3, 3]
-
-
-def test_start_xy_for_neutron_black():
-    board = Board()
-    figure = Figure.BLACK
-    coordinates = board.start_xy_for_neutron(figure)
-    assert coordinates == False
 
 
 def test_start_xy_for_neutron_another():
@@ -221,3 +214,10 @@ def test_choose_correct_fromXY_neutron():
     board._board[2][4] = Pawn(3, 4, 2)
     result = board.choose_correct_fromXY(Figure.NEUTRON)
     assert result == [4, 2]
+
+
+# def test_choose_correct_toXY_black(monkeypatch):
+#     board = Board()
+#     monkeypatch.setattr('builtins.input', lambda _: "5 3")
+#     result = board.choose_correct_toXY(Figure.BLACK, [3, 1])
+#     assert result == [5, 3]

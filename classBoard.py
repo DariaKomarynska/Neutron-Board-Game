@@ -51,21 +51,21 @@ class Board:
     def is_empty(self, x, y):
         return self.get_pawn(x, y).CODE == "empty"
 
-    def input_coordinates(self):
+    def input_coordinates(self, from_to):
         # Enter list of two numbers for x and y with space.
-        XY = list((input("From X Y: ")).split())
+        your_xy = "From X Y: " if from_to == 1 else "To X Y: "
+        XY = list((input(your_xy)).split())
         return XY
 
     def start_xy_for_neutron(self, figure):
-        if figure == Figure.NEUTRON:
-                # If figure is Neutron: don't ask fromXY, take from the board
-                for j in range(1, 6):
-                    for i in range(1, 6):
-                        if self._board[j][i]._figure == figure:
-                            fromXY = [i, j]
-                            return fromXY
-        else:
-            return False
+        # If figure is Neutron: don't ask fromXY, take from the board
+        figure = Figure.NEUTRON
+        for j in range(1, 6):
+            for i in range(1, 6):
+                if self._board[j][i]._figure == figure:
+                    fromXY = [i, j]
+                    return fromXY
+
 
     def give_possible_moves(self, start_XY):
         possible_moves = self.get_pawn_moves(start_XY[0], start_XY[1])
@@ -75,20 +75,22 @@ class Board:
 
     def check_given_coordinates(self, coordinates):
         if (
-            (len(coordinates) != 2)
-            or (not coordinates[0].isdigit() or not coordinates[1].isdigit())
+            (len(coordinates) == 2)
+            and (coordinates[0].isdigit() and coordinates[1].isdigit())
         ):
             # Check number of input elements
             # Check: is input element digit?
-            print("Try again")
-            return False
-        else:
             coordinates[0] = int(coordinates[0])
             coordinates[1] = int(coordinates[1])
             if coordinates[0] not in range(1, 6) or coordinates[1] not in range(1, 6):
                 # Check: is input element 1,2,3,4,5?
+                # print("Try again")
                 return False
             return True
+        else:
+            # print("Try again")
+            return False
+
 
     def check_xyTo_in_possible_moves(self, xyFrom, xyTo):
         # Do chooosen elements belong to list of possible moves?
@@ -103,27 +105,62 @@ class Board:
             return False
         return True
 
+    def input_and_check_coordinates(self, figure, from_to):
+        quit = True
+        while quit:
+            coordinates = self.input_coordinates(from_to)
+            if (
+                (from_to == 1
+                and self.check_given_coordinates(coordinates)
+                and self.check_choosen_figure_on_the_board(figure, coordinates[0], coordinates[1]))
+                or (from_to == 0 and self.check_given_coordinates(coordinates))
+            ):
+                quit = False
+                break
+            else:
+                print("Try again!")
+                quit = True
+        return coordinates
+
     def choose_correct_fromXY(self, figure):
         quit = True
-        if self.start_xy_for_neutron(figure) is not False:
-            fromXY = self.start_xy_for_neutron(figure)
-            if not self.check_pawn_not_zero_moves(figure, fromXY):
-                return False
-
-        else:
-            while quit:
-                fromXY = self.input_coordinates()
-                if (
-                    self.check_given_coordinates(fromXY)
-                    and self.check_choosen_figure_on_the_board(figure, fromXY[0], fromXY[1])
-                    and self.check_pawn_not_zero_moves(figure, fromXY)
-                ):
+        while quit:
+            if figure != Figure.NEUTRON:
+                fromXY = self.input_and_check_coordinates(figure, 1)
+                if self.check_pawn_not_zero_moves(figure, fromXY) is False:
+                    continue
+                else:
+                    quit = False
+                    break
+            else:
+                fromXY = self.start_xy_for_neutron(figure)
+                if not self.check_pawn_not_zero_moves(figure, fromXY):
+                    return False
+                else:
                     quit = False
                     break
         return fromXY
 
+    def choose_correct_toXY(self, figure, fromXY):
+        quit = True
+        while quit:
+            toXY = self.input_and_check_coordinates(figure, 0)
+            if self.check_xyTo_in_possible_moves(fromXY, toXY):
+                quit = False
+                break
+            else:
+                quit = True
+        return toXY
 
     def enter_coordinates(self, figure):
+        fromXY = self.choose_correct_fromXY(figure)
+        if fromXY is False:
+            return False
+        print(self.give_possible_moves(fromXY))
+        toXY = self.choose_correct_toXY(figure, fromXY)
+        self.move_pawns(fromXY, toXY)
+
+    def enter_coordinates5(self, figure):
         """
         Player should enter coordinates for moving pawn.
         Input x and y shoud be checked.
