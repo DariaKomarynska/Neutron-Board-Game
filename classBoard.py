@@ -13,12 +13,15 @@ class Board:
         neutron = Figure.NEUTRON
         # Start position on the board.
         for j in range(1, 6):
-            self._board[1][j] = Pawn(black, j, 1)
+            # self._board[1][j] = Pawn(black, j, 1)
             self._board[5][j] = Pawn(white, j, 5)
         for j in range(1, 6):
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
+        self._board[5][2] = Empty()
+        self._board[1][2] = Pawn(black, 3, 3)
+        self._board[1][4] = Pawn(black, 3, 3)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -215,6 +218,14 @@ class Board:
         print(self.get_pawn_moves(from_XY[0], from_XY[1]))
         self.move_pawns(from_XY, to_XY)
 
+    def get_list_of_pawns(self, figure):
+        pawns = []
+        for x in range(1, 6):
+            for y in range(1, 6):
+                if self.check_choosen_figure_on_the_board(figure, x, y):
+                    pawns.append([x, y])
+        return pawns
+
     def hard_opponent_coordinates(self, figure):
         """
         Computer chooses best coordinates for "From X Y" and "To X Y".
@@ -223,6 +234,7 @@ class Board:
         correct_xy = True
         flag = True
         quit = True
+        counter_from = 0
         while correct_xy and flag:
             from_xy = choices(possible, k=2)
             if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
@@ -250,51 +262,59 @@ class Board:
                             flag = True
                             quit = True
                             break
-                elif figure == Figure.BLACK:
-                    if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
-                        correct_xy = True
-                        flag = True
-                        continue
-                    elif len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 1:
-                        flag = False
-                        correct_xy = True
-                        to_xy = self.get_pawn_moves(from_xy[0], from_xy[1])[0]
-                        break
-                    else:
-                        correct_xy = False
-                        quit = True
-                        flag = False
-                        break
+                else:
+                    counter_from += 1
+                    correct_xy = False
+                    flag = True
+                    quit = True
+                    break
+                    # if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
+                    #     correct_xy = True
+                    #     flag = True
+                    #     continue
+                    # elif len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 1:
+                    #     flag = False
+                    #     correct_xy = True
+                    #     to_xy = self.get_pawn_moves(from_xy[0], from_xy[1])[0]
+                    #     break
+                    # else:
+                    #     correct_xy = False
+                    #     quit = True
+                    #     flag = False
+                    #     break
+                    # flag = False
 
-                    if flag is False:
-                        for k in range(100):
-                            for i in range(1, 6):
-                                white_row = [i, 5]
-                                # if black pawn can stand on the white row - move there
-                                # to prevent empty places on white row (opponent)
-                                if self.get_pawn_moves(from_xy[0], from_xy[1]).count(white_row) == 1:
-                                    to_xy = white_row
-                                    correct_xy = True
-                                    flag = False
-                                    break
-                                elif (
-                                    self.get_pawn_moves(from_xy[0], from_xy[1]).count(white_row) != 1
-                                    and k != 99
-                                ):
-                                    correct_xy = True
-                                    flag = True
-                                    continue
-                                else:
-                                    correct_xy = False
-                                    flag = True
-                                    break
-
+                    # if flag is False:
+                    #     # for k in range(100):
+                    #     if
+                    #         # if black pawn can stand on the white row - move there
+                    #         # to prevent empty places on white row (opponent)
+                    #         if self.get_pawn_moves(from_xy[0], from_xy[1]).count(white_row) == 1:
+                    #             to_xy = white_row
+                    #             correct_xy = True
+                    #             flag = False
+                    #             break
+                    #         elif (
+                    #             self.get_pawn_moves(from_xy[0], from_xy[1]).count(white_row) != 1
+                    #             and k != 99
+                    #         ):
+                    #             correct_xy = True
+                    #             flag = True
+                    #             continue
+                    #         else:
+                    #             correct_xy = False
+                    #             flag = True
+                    #             break
+        counter_to = 0
         while correct_xy is False and quit is True:
             # If figure is Black Pawn
+
             to_xy = choices(possible, k=2)
+
             if self.get_pawn_moves(from_xy[0], from_xy[1]).count(to_xy) == 1:
                 flag = False
                 correct_xy = True
+                counter_to += 1
                 if figure == Figure.NEUTRON:
                     # Check looser position
                     # If Neutron has variants: choose looser position
@@ -305,8 +325,21 @@ class Board:
                         continue
                     else:
                         break
-                else:
-                    break
+                elif figure == Figure.BLACK:
+                    if to_xy[1] == 5:
+                        break
+                    elif to_xy[1] != 5 and counter_to < 100:
+                        correct_xy = False
+                        quit = True
+                        continue
+                    elif to_xy[1] != 5 and counter_to == 100 and counter_from < 20:
+                        correct_xy = True
+                        flag = True
+                        break
+                    elif to_xy[1] != 5 and counter_to == 100 and counter_from == 20:
+                        flag = False
+                        correct_xy = True
+                        break
 
         if flag is False and correct_xy is True and quit is True:
             print(from_xy)

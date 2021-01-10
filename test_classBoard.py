@@ -259,3 +259,10 @@ def test_random_to_xy_neutron(monkeypatch):
     monkeypatch.setattr('classBoard.choices', new_result)
     result = board.random_toXY(Figure.NEUTRON, [3, 3])
     assert result == [1, 3]
+
+
+def test_get_list_of_pawns():
+    board = Board()
+    figure = Figure.BLACK
+    result = board.get_list_of_pawns(figure)
+    assert result == [[2, 1], [4, 1]]
