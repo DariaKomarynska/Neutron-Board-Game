@@ -237,3 +237,14 @@ def test_random_fromXY_white(monkeypatch):
     monkeypatch.setattr('classBoard.choices', new_result)
     result = board.random_fromXY(Figure.WHITE)
     assert result == [4, 5]
+
+
+def test_random_to_xy_black(monkeypatch):
+    board = Board()
+
+    def new_result(a, k):
+        res = [4, 2]
+        return res
+    monkeypatch.setattr('classBoard.choices', new_result)
+    result = board.random_toXY(Figure.WHITE, [4, 5])
+    assert result == [4, 2]

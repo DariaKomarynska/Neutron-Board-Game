@@ -66,7 +66,6 @@ class Board:
                     fromXY = [i, j]
                     return fromXY
 
-
     def give_possible_moves(self, start_XY):
         possible_moves = self.get_pawn_moves(start_XY[0], start_XY[1])
         print("HINTS")
@@ -90,7 +89,6 @@ class Board:
         else:
             # print("Try again")
             return False
-
 
     def check_xyTo_in_possible_moves(self, xyFrom, xyTo):
         # Do chooosen elements belong to list of possible moves?
@@ -173,11 +171,11 @@ class Board:
 
     def random_fromXY(self, figure):
         possible = [1, 2, 3, 4, 5]
-        from_xy = choices(possible, k=2)
         quit = True
         while quit:
+            from_xy = choices(possible, k=2)
             if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
-
+                quit = False
                 if len(self.get_pawn_moves(from_xy[0], from_xy[1])) != 0:
                     quit = False
                     break
@@ -188,16 +186,41 @@ class Board:
                     return False
                 else:
                     quit = True
-                    # break
+                    continue
+            else:
+                quit = True
+                continue
         return from_xy
+
+    def random_toXY(self, figure, from_xy):
+        possible = [1, 2, 3, 4, 5]
+        quit = True
+        while quit:
+            to_xy = choices(possible, k=2)
+            if self.check_xyTo_in_possible_moves(from_xy, to_xy):
+                return to_xy
+            else:
+                quit = True
+                continue
 
     def random_opponent_coordinates(self, figure):
         """
         Computer chooses random coordinates for "From X Y" and "To X Y".
         """
+        from_XY = self.random_fromXY(figure)
+        if from_XY is False:
+            return False
+        to_XY = self.random_toXY(figure, from_XY)
+        print(from_XY)
+        print(self.get_pawn_moves(from_XY[0], from_XY[1]))
+        self.move_pawns(from_XY, to_XY)
+
+    def random_opponent_coordinates5(self, figure):
+        """
+        Computer chooses random coordinates for "From X Y" and "To X Y".
+        """
         possible = [1, 2, 3, 4, 5]
         flag = True
-
         while flag:
             from_xy = choices(possible, k=2)
             if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
