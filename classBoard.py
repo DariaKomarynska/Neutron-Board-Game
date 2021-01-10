@@ -2,6 +2,7 @@ from classEmpty import Empty
 from classFigure import Figure
 from classPawn import Pawn
 from random import choice
+from random import choices
 
 
 class Board:
@@ -19,9 +20,6 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
-        # self._board[5][2] = Empty()
-        # self._board[1][2] = Pawn(black, 3, 3)
-        # self._board[1][4] = Pawn(black, 3, 3)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -86,7 +84,6 @@ class Board:
             coordinates[1] = int(coordinates[1])
             if coordinates[0] not in range(1, 6) or coordinates[1] not in range(1, 6):
                 # Check: is input element 1,2,3,4,5?
-                # print("Try again")
                 return False
             return True
         else:
@@ -177,20 +174,13 @@ class Board:
         quit = True
         while quit:
             from_xy = choice(possible)
-            possible.remove(from_xy)
-            if len(self.get_pawn_moves(from_xy[0], from_xy[1])) != 0:
-                quit = False
-                break
-            elif (
-                len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0
-                and figure == Figure.NEUTRON
-            ):
-                return False
+            if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
+                if figure == Figure.NEUTRON:
+                    return False
+                else:
+                    continue
             else:
-                quit = True
-                continue
-
-        return from_xy
+                return from_xy
 
     def random_toXY(self, figure, from_xy):
         possible = self.get_pawn_moves(from_xy[0], from_xy[1])
@@ -205,9 +195,6 @@ class Board:
         if from_XY is False:
             return False
         to_XY = self.random_toXY(figure, from_XY)
-        print(from_XY)
-        print(self.get_list_of_pawns(figure))
-        print(self.get_pawn_moves(from_XY[0], from_XY[1]))
         self.move_pawns(from_XY, to_XY)
 
     def get_list_of_pawns(self, figure):
@@ -218,17 +205,53 @@ class Board:
                     pawns.append([x, y])
         return pawns
 
+    def hard_opponent_coordinates_toXY_neutron(self, figure):
+        quit = True
+        while quit:
+            fromXY = self.random_fromXY(figure)
+            if fromXY is not False:
+                for j in range(1, 6):
+                    vic = [j, 1]
+                    if self.get_pawn_moves(from_xy[0], from_xy[1]).count(vic) == 1:
+                        toXY = vic
+                        quit = False
+                        break
+                else:
+                    toXY = self.random_toXY(figure, fromXY)
+                    if (to_xy[1] == 5) and (len(possible2) != 1):
+                        correct_xy = False
+                        quit = True
+                        continue
+                    else:
+                        break
+        return toXY
+
+    def hard_opponent_coordinates_toXY_black(self, figure, fromXY):
+        quit = True
+        while quit:
+            for j in range(1, 6):
+                on_white = [j, 5]
+                if self.get_pawn_moves(fromXY[0], fromXY[1]).count(on_white) == 1:
+                    toXY = on_white
+                    quit = False
+                    break
+            else:
+                toXY = self.random_toXY(figure, fromXY)
+        return toXY
+
+
     def hard_opponent_coordinates(self, figure):
         """
         Computer chooses best coordinates for "From X Y" and "To X Y".
         """
-        possible = [1, 2, 3, 4, 5]
+        possible = self.get_list_of_pawns(figure)
         correct_xy = True
         flag = True
         quit = True
         counter_from = 0
+        counter_to = 0
         while correct_xy and flag:
-            from_xy = choices(possible, k=2)
+            from_xy = choice(possible)
             if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
                 if figure == Figure.NEUTRON:
                     if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
@@ -256,14 +279,16 @@ class Board:
                             break
                 else:
                     counter_from += 1
-                    correct_xy = False
-                    flag = True
-                    quit = True
-                    break
-                    # if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
-                    #     correct_xy = True
-                    #     flag = True
-                    #     continue
+
+                    if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
+                        correct_xy = True
+                        flag = True
+                        continue
+                    else:
+                        correct_xy = False
+                        flag = True
+                        quit = True
+                        break
                     # elif len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 1:
                     #     flag = False
                     #     correct_xy = True
@@ -297,11 +322,11 @@ class Board:
                     #             correct_xy = False
                     #             flag = True
                     #             break
-        counter_to = 0
+
         while correct_xy is False and quit is True:
             # If figure is Black Pawn
-
-            to_xy = choices(possible, k=2)
+            possible2 = self.get_pawn_moves(from_xy[0], from_xy[1])
+            to_xy = choice(possible2)
 
             if self.get_pawn_moves(from_xy[0], from_xy[1]).count(to_xy) == 1:
                 flag = False
@@ -311,7 +336,7 @@ class Board:
                     # Check looser position
                     # If Neutron has variants: choose looser position
                     # or another one, It should choose last one
-                    if to_xy[1] == 5:
+                    if (to_xy[1] == 5) and (len(possible2) != 1):
                         correct_xy = False
                         quit = True
                         continue
@@ -324,11 +349,11 @@ class Board:
                         correct_xy = False
                         quit = True
                         continue
-                    elif to_xy[1] != 5 and counter_to == 100 and counter_from < 20:
-                        correct_xy = True
-                        flag = True
-                        break
-                    elif to_xy[1] != 5 and counter_to == 100 and counter_from == 20:
+                    # elif to_xy[1] != 5 and counter_to == 100 and counter_from < 20:
+                    #     correct_xy = True
+                    #     flag = True  and counter_from == 20
+                        # break
+                    elif to_xy[1] != 5 and counter_to == 100:
                         flag = False
                         correct_xy = True
                         break

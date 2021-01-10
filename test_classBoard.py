@@ -271,3 +271,26 @@ def test_get_list_of_pawns():
     board._board[1][4] = Pawn(1, 3, 3)
     result = board.get_list_of_pawns(figure)
     assert result == [[2, 1], [4, 1]]
+
+
+def test_get_list_of_pawns2():
+    board = Board()
+    figure = Figure.BLACK
+    board._board[5][1] = Empty()
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[2][3] = Pawn(1, 3, 2)
+    board._board[1][5] = Pawn(2, 5, 1)
+    board._board[5][3] = Pawn(3, 3, 5)
+    result = board.get_list_of_pawns(figure)
+    assert result == [[1, 1], [2, 1], [3, 1], [3, 2], [4, 1]]
+
+
+def test_hard_opponent_coordinates_toXY_black():
+    board = Board()
+    board._board[5][2] = Empty()
+    board._board[4][1] = Pawn(2, 1, 4)
+    figure = Figure.BLACK
+    fromXY = [2, 1]
+    to_xy = board.hard_opponent_coordinates_toXY_black(figure, fromXY)
+    assert to_xy == [2, 5]
+
