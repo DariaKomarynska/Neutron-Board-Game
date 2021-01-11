@@ -169,11 +169,11 @@ class Board:
         toXY = self.choose_correct_toXY(figure, fromXY)
         self.move_pawns(fromXY, toXY)
 
-    def random_fromXY(self, figure):
-        possible = self.get_list_of_pawns(figure)
+    def random_fromXY(self, figure, pawns):
+        possible_pawns = pawns
         quit = True
         while quit:
-            from_xy = choice(possible)
+            from_xy = choice(possible_pawns)
             if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
                 if figure == Figure.NEUTRON:
                     return False
@@ -191,7 +191,8 @@ class Board:
         """
         Computer chooses random coordinates for "From X Y" and "To X Y".
         """
-        from_XY = self.random_fromXY(figure)
+        pawns = self.get_list_of_pawns(figure)
+        from_XY = self.random_fromXY(figure, pawns)
         if from_XY is False:
             return False
         to_XY = self.random_toXY(figure, from_XY)
@@ -208,17 +209,19 @@ class Board:
     def hard_opponent_coordinates_toXY_neutron(self, figure):
         quit = True
         while quit:
-            fromXY = self.random_fromXY(figure)
+            pawns = self.get_list_of_pawns(figure)
+            fromXY = self.random_fromXY(figure, pawns)
             if fromXY is not False:
                 for j in range(1, 6):
-                    vic = [j, 1]
-                    if self.get_pawn_moves(from_xy[0], from_xy[1]).count(vic) == 1:
+                    vic = [j, 1]    # victory position
+                    if self.get_pawn_moves(fromXY[0], fromXY[1]).count(vic) == 1:
                         toXY = vic
                         quit = False
                         break
                 else:
+                    possible = self.get_pawn_moves(fromXY[0], fromXY[1])
                     toXY = self.random_toXY(figure, fromXY)
-                    if (to_xy[1] == 5) and (len(possible2) != 1):
+                    if (toXY[1] == 5) and (len(possible) != 1):
                         correct_xy = False
                         quit = True
                         continue
@@ -226,145 +229,53 @@ class Board:
                         break
         return toXY
 
+    def hard_check_black_goes_on_white(self, from_xy):
+        for j in range(1, 6):
+            on_white = [j, 5]
+            if self.get_pawn_moves(from_xy[0], from_xy[1]).count(on_white) == 1:
+                toXY = on_white
+                return toXY
+        else:
+            return False
+
     def hard_opponent_coordinates_toXY_black(self, figure, fromXY):
         quit = True
+        temp_fromXY = fromXY
+        pawns = self.get_list_of_pawns(figure)
         while quit:
-            for j in range(1, 6):
-                on_white = [j, 5]
-                if self.get_pawn_moves(fromXY[0], fromXY[1]).count(on_white) == 1:
-                    toXY = on_white
-                    quit = False
-                    break
+            toXY = self.hard_check_black_goes_on_white(temp_fromXY)
+            if toXY is not False:
+                quit = False
+                break
+            if len(pawns) != 1:
+                used_fromXY = temp_fromXY
+                pawns.remove(used_fromXY)
+                temp_fromXY = self.random_fromXY(figure, pawns)
+                quit = True
+                continue
             else:
                 toXY = self.random_toXY(figure, fromXY)
-        return toXY
-
+                temp_fromXY = fromXY
+                quit = False
+                break
+        return [temp_fromXY, toXY]
 
     def hard_opponent_coordinates(self, figure):
         """
         Computer chooses best coordinates for "From X Y" and "To X Y".
         """
-        possible = self.get_list_of_pawns(figure)
-        correct_xy = True
-        flag = True
-        quit = True
-        counter_from = 0
-        counter_to = 0
-        while correct_xy and flag:
-            from_xy = choice(possible)
-            if self.check_choosen_figure_on_the_board(figure, from_xy[0], from_xy[1]):
-                if figure == Figure.NEUTRON:
-                    if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
-                        # If neutron cannot move - game over
-                        correct_xy = False
-                        flag = True
-                        quit = False
-                        break
-                    else:
-                        flag = False
-                    if flag is False:
-                        for j in range(1, 6):
-                            # If neutron can choose position on black row,
-                            # choose it
-                            vic = [j, 1]    # Victory position
-                            if self.get_pawn_moves(from_xy[0], from_xy[1]).count(vic) == 1:
-                                to_xy = vic
-                                correct_xy = True
-                                flag = False
-                                break
-                        else:
-                            correct_xy = False
-                            flag = True
-                            quit = True
-                            break
-                else:
-                    counter_from += 1
-
-                    if len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 0:
-                        correct_xy = True
-                        flag = True
-                        continue
-                    else:
-                        correct_xy = False
-                        flag = True
-                        quit = True
-                        break
-                    # elif len(self.get_pawn_moves(from_xy[0], from_xy[1])) == 1:
-                    #     flag = False
-                    #     correct_xy = True
-                    #     to_xy = self.get_pawn_moves(from_xy[0], from_xy[1])[0]
-                    #     break
-                    # else:
-                    #     correct_xy = False
-                    #     quit = True
-                    #     flag = False
-                    #     break
-                    # flag = False
-
-                    # if flag is False:
-                    #     # for k in range(100):
-                    #     if
-                    #         # if black pawn can stand on the white row - move there
-                    #         # to prevent empty places on white row (opponent)
-                    #         if self.get_pawn_moves(from_xy[0], from_xy[1]).count(white_row) == 1:
-                    #             to_xy = white_row
-                    #             correct_xy = True
-                    #             flag = False
-                    #             break
-                    #         elif (
-                    #             self.get_pawn_moves(from_xy[0], from_xy[1]).count(white_row) != 1
-                    #             and k != 99
-                    #         ):
-                    #             correct_xy = True
-                    #             flag = True
-                    #             continue
-                    #         else:
-                    #             correct_xy = False
-                    #             flag = True
-                    #             break
-
-        while correct_xy is False and quit is True:
-            # If figure is Black Pawn
-            possible2 = self.get_pawn_moves(from_xy[0], from_xy[1])
-            to_xy = choice(possible2)
-
-            if self.get_pawn_moves(from_xy[0], from_xy[1]).count(to_xy) == 1:
-                flag = False
-                correct_xy = True
-                counter_to += 1
-                if figure == Figure.NEUTRON:
-                    # Check looser position
-                    # If Neutron has variants: choose looser position
-                    # or another one, It should choose last one
-                    if (to_xy[1] == 5) and (len(possible2) != 1):
-                        correct_xy = False
-                        quit = True
-                        continue
-                    else:
-                        break
-                elif figure == Figure.BLACK:
-                    if to_xy[1] == 5:
-                        break
-                    elif to_xy[1] != 5 and counter_to < 100:
-                        correct_xy = False
-                        quit = True
-                        continue
-                    # elif to_xy[1] != 5 and counter_to == 100 and counter_from < 20:
-                    #     correct_xy = True
-                    #     flag = True  and counter_from == 20
-                        # break
-                    elif to_xy[1] != 5 and counter_to == 100:
-                        flag = False
-                        correct_xy = True
-                        break
-
-        if flag is False and correct_xy is True and quit is True:
-            print(from_xy)
-            print(to_xy)
-            print(self.get_pawn_moves(from_xy[0], from_xy[1]))
-            self.move_pawns(from_xy, to_xy)
-        if correct_xy is False and quit is False and flag is True:
+        pawns = self.get_list_of_pawns(figure)
+        from_XY = self.random_fromXY(figure, pawns)
+        if from_XY is False:
             return False
+        if figure == Figure.BLACK:
+            to_XY = self.hard_opponent_coordinates_toXY_black(figure, from_XY)[1]
+            new_from_XY = self.hard_opponent_coordinates_toXY_black(figure, from_XY)[0]
+        else:
+            to_XY = self.hard_opponent_coordinates_toXY_neutron(figure)
+        print(from_XY)
+        print(to_XY)
+        self.move_pawns(from_XY, to_XY)
 
     def game_over(self, ver):
         """
@@ -372,7 +283,6 @@ class Board:
         If the Neutron shows up on White back row, player1 have won the game.
         If the Neutron shows up on Black back row, player2 have won the game.
         """
-
         for j in range(1, 6):
             if self._board[1][j]._figure == Figure.NEUTRON:
                 # ver - version of the game

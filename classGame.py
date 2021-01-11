@@ -125,20 +125,18 @@ class Game:
 
     def start_game(self, version):
         b = Board()
-        print()
-
         if version == 2 or version == 3:
             new = 23
             print("Player-1 - 🟡 | Player-2 - 🟣")
         if version == 4 or version == 5:
             new = 45
             print("Player-1 - 🟣 | Player-2 - 🟡")
+        print()
         print(b)
         version = int(version)
         white = Figure.WHITE
         black = Figure.BLACK
         neutron = Figure.NEUTRON
-        quit = True
         white_won = "Player-2 has fallen into a trap and cannot move Neutron\
                     \n🟣 Player-2 🟣 is Looser\
                     \n🟡 Player-1 🟡 is WINNER"
@@ -152,7 +150,7 @@ class Game:
                     \n🟣 Player-1 🟣 is Looser\
                     \n🟡 Player-2 🟡 is WINNER"
         print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
-        while quit is True:
+        while True:
             print()
             if version == 2 or version == 3:
                 print("Player-1 🟡, move a piece:")
@@ -170,7 +168,6 @@ class Game:
                     print()
                     print(b)
                     print(white_won)
-                    quit = False
                     break
             elif version == 3:
                 print("Player-2 🟣, move Neutron 🐹: ")
@@ -199,7 +196,6 @@ class Game:
             print(b)
             # After moving neutron
             if b.game_over(new) is True:
-                quit = False
                 break
             print()
             if version == 2:
@@ -225,7 +221,6 @@ class Game:
                     print()
                     print(b)
                     print(black_won)
-                    quit = False
                     break
             elif version == 4 or version == 5:
                 print("Player-1 🟣, move Neutron 🐹: ")
@@ -234,12 +229,10 @@ class Game:
                     print()
                     print(b)
                     print(white_won_hard)
-                    quit = False
                     break
             print()
             print(b)
             # After moving neutron
             if b.game_over(new) is True:
-                quit = False
                 break
         print()
