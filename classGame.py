@@ -123,7 +123,7 @@ class Game:
                 self.start_game(n_start)
                 break
 
-    def start_game(self, version):
+    def start_game5(self, version):
         b = Board()
         if version == 2 or version == 3:
             new = 23
@@ -232,6 +232,47 @@ class Game:
                     break
             print()
             print(b)
+            # After moving neutron
+            if b.game_over(new) is True:
+                break
+        print()
+
+    def start_game(self, version):
+        b = Board()
+        if version == 2 or version == 3:
+            new = 23
+            print("Player-1 - 🟡 | Player-2 - 🟣")
+        if version == 4 or version == 5:
+            new = 45
+            print("Player-1 - 🟣 | Player-2 - 🟡")
+        print()
+        print(b)
+        version = int(version)
+        white = Figure.WHITE
+        black = Figure.BLACK
+        neutron = Figure.NEUTRON
+        white_won = "Player-2 has fallen into a trap and cannot move Neutron\
+                    \n🟣 Player-2 🟣 is Looser\
+                    \n🟡 Player-1 🟡 is WINNER"
+        black_won = "Player-1 has fallen into a trap and cannot move Neutron\
+                    \n🟡 Player-1 🟡 is Looser\
+                    \n🟣 Player-2 🟣 is WINNER"
+        black_won_hard = "Player-2 has fallen into a trap and cannot move Neutron\
+                    \n🟡 Player-2 🟡 is Looser\
+                    \n🟣 Player-1 🟣 is WINNER"
+        white_won_hard = "Player-1 has fallen into a trap and cannot move Neutron\
+                    \n🟣 Player-1 🟣 is Looser\
+                    \n🟡 Player-2 🟡 is WINNER"
+        print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
+        while True:
+            print()
+            if version == 5:
+                print("Player-1 🟣, move a piece:")
+                input("Computer's move - Press enter  ")
+                b.hard_opponent_coordinates(black)
+            print()
+            print(b)
+            print()
             # After moving neutron
             if b.game_over(new) is True:
                 break

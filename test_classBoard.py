@@ -294,13 +294,15 @@ def test_hard_opponent_coordinates_toXY_black():
     to_xy = board.hard_opponent_coordinates_toXY_black(figure, fromXY)
     assert to_xy[1] == [2, 5]
 
-# def test_hard_opponent_coordinates_toXY_black5(monkeypatch):
-#     board = Board()
-#     figure = Figure.BLACK
-#     fromXY = [3, 1]
-#     def new_result(a):
-#         res = [5, 3]
-#         return res
-#     monkeypatch.setattr('classBoard.choice', new_result)
-#     to_xy = board.hard_opponent_coordinates_toXY_black(figure, fromXY)
-#     assert to_xy[1] == [5, 3]
+
+def test_hard_opponent_coordinates():
+    board = Board()
+    figure = Figure.BLACK
+    fromXY = [3, 1]
+    # def new_result(a):
+    #     res = [5, 3]
+    #     return res
+    # monkeypatch.setattr('classBoard.choice', new_result)
+    to_xy = board.hard_opponent_coordinates(figure)
+    assert to_xy[1] == [5, 3]
+

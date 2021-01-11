@@ -20,6 +20,8 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
+        self._board[5][2] = Empty()
+        self._board[5][4] = Empty()
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -269,13 +271,15 @@ class Board:
         if from_XY is False:
             return False
         if figure == Figure.BLACK:
-            to_XY = self.hard_opponent_coordinates_toXY_black(figure, from_XY)[1]
-            new_from_XY = self.hard_opponent_coordinates_toXY_black(figure, from_XY)[0]
+            coordinates_moving = self.hard_opponent_coordinates_toXY_black(figure, from_XY)
+            from_XY = coordinates_moving[0]
+            to_XY = coordinates_moving[1]
         else:
             to_XY = self.hard_opponent_coordinates_toXY_neutron(figure)
         print(from_XY)
         print(to_XY)
         self.move_pawns(from_XY, to_XY)
+        # return (from_XY, to_XY)
 
     def game_over(self, ver):
         """
