@@ -20,8 +20,15 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
-        self._board[5][2] = Empty()
-        self._board[5][4] = Empty()
+        # self._board[5][2] = Empty()
+        # self._board[1][5] = Empty()
+        # self._board[2][2] = Pawn(1, 2, 2)
+        # self._board[3][3] = Pawn(2, 3, 3)
+        # self._board[3][2] = Pawn(2, 2, 3)
+        # self._board[3][4] = Pawn(2, 4, 3)
+        # self._board[2][4] = Pawn(2, 4, 2)
+        # self._board[2][3] = Pawn(3, 4, 2)
+        # self._board[5][5] = Pawn(2, 4, 2)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -279,7 +286,6 @@ class Board:
         print(from_XY)
         print(to_XY)
         self.move_pawns(from_XY, to_XY)
-        # return (from_XY, to_XY)
 
     def game_over(self, ver):
         """
@@ -292,11 +298,11 @@ class Board:
                 # ver - version of the game
                 if ver == 23:
                     print("🟡 Player-1 🟡 is Looser")
-                    print("🟣 Player-2 🟣 is Winner")
+                    print("🟣 Player-2 🟣 is WINNER")
                     return True
                 else:
                     print("🟡 Player-2 🟡 is Looser")
-                    print("🟣 Player-1 🟣 is Winner")
+                    print("🟣 Player-1 🟣 is WINNER")
                     return True
             elif self._board[5][j]._figure == Figure.NEUTRON:
                 if ver == 23:
@@ -304,5 +310,5 @@ class Board:
                     return True
                 else:
                     print("🟣 Player-1 🟣 is Looser")
-                    print("🟡 Player-2 🟡 is Winner")
+                    print("🟡 Player-2 🟡 is WINNER")
                     return True

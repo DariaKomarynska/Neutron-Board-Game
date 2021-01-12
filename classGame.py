@@ -123,134 +123,111 @@ class Game:
                 self.start_game(n_start)
                 break
 
-    def start_game5(self, version):
-        b = Board()
-        if version == 2 or version == 3:
-            new = 23
-            print("Player-1 - 🟡 | Player-2 - 🟣")
-        if version == 4 or version == 5:
-            new = 45
-            print("Player-1 - 🟣 | Player-2 - 🟡")
-        print()
-        print(b)
-        version = int(version)
+    def game_two_people_2_3(self, version, black_won, white_won):
+        counter = 23
         white = Figure.WHITE
         black = Figure.BLACK
         neutron = Figure.NEUTRON
-        white_won = "Player-2 has fallen into a trap and cannot move Neutron\
-                    \n🟣 Player-2 🟣 is Looser\
-                    \n🟡 Player-1 🟡 is WINNER"
-        black_won = "Player-1 has fallen into a trap and cannot move Neutron\
-                    \n🟡 Player-1 🟡 is Looser\
-                    \n🟣 Player-2 🟣 is WINNER"
-        black_won_hard = "Player-2 has fallen into a trap and cannot move Neutron\
-                    \n🟡 Player-2 🟡 is Looser\
-                    \n🟣 Player-1 🟣 is WINNER"
-        white_won_hard = "Player-1 has fallen into a trap and cannot move Neutron\
-                    \n🟣 Player-1 🟣 is Looser\
-                    \n🟡 Player-2 🟡 is WINNER"
-        print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
+        b = Board()
+        print("Player-1 - 🟡 | Player-2 - 🟣")
+        print(b)
         while True:
             print()
-            if version == 2 or version == 3:
-                print("Player-1 🟡, move a piece:")
-                b.enter_coordinates(white)
-            elif version == 4 or version == 5:
-                print("Player-1 🟣, move a piece:")
-                input("Computer's move - Press enter  ")
-                b.hard_opponent_coordinates(black)
+            print("Player-1 🟡, move a piece:")
+            b.enter_coordinates(white)
+            self.print_b(b)
             print()
-            print(b)
-            print()
+            print("Player-2 🟣, move Neutron 🐹: ")
             if version == 2:
-                print("Player-2 🟣, move Neutron 🐹: ")
                 if b.enter_coordinates(neutron) is False:
-                    print()
-                    print(b)
+                    self.print_b(b)
                     print(white_won)
                     break
-            elif version == 3:
-                print("Player-2 🟣, move Neutron 🐹: ")
+            else:
                 input("Computer's move - Press enter  ")
                 if b.random_opponent_coordinates(neutron) is False:
-                    print()
-                    print(b)
+                    self.print_b(b)
                     print(white_won)
                     break
-            elif version == 4:
-                print("Player-2 🟡, move Neutron 🐹: ")
-                if b.enter_coordinates(neutron) is False:
-                    print()
-                    print(b)
-                    print(black_won_hard)
-                    break
-            elif version == 5:
-                print("Player-2 🟡, move Neutron 🐹: ")
-                input("Computer's move - Press enter  ")
-                if b.random_opponent_coordinates(neutron) is False:
-                    print()
-                    print(b)
-                    print(black_won_hard)
-                    break
+            self.print_b(b)
             print()
-            print(b)
             # After moving neutron
-            if b.game_over(new) is True:
+            if b.game_over(counter) is True:
                 break
-            print()
+            print("Player-2 🟣, move a piece: ")
             if version == 2:
-                print("Player-2 🟣, move a piece: ")
                 b.enter_coordinates(black)
-            elif version == 3:
-                print("Player-2 🟣, move a piece: ")
+            else:
                 input("Computer's move - press enter  ")
                 b.random_opponent_coordinates(black)
-            elif version == 4:
-                print("Player-2 🟡, move a piece: ")
-                b.enter_coordinates(white)
-            elif version == 5:
-                print("Player-2 🟡, move a piece: ")
-                input("Computer's move - press enter  ")
-                b.random_opponent_coordinates(white)
+            self.print_b(b)
             print()
-            print(b)
-            print()
-            if version == 2 or version == 3:
-                print("Player-1 🟡, move Neutron 🐹: ")
-                if b.enter_coordinates(neutron) is False:
-                    print()
-                    print(b)
-                    print(black_won)
-                    break
-            elif version == 4 or version == 5:
-                print("Player-1 🟣, move Neutron 🐹: ")
-                input("Computer's move - Press enter  ")
-                if b.hard_opponent_coordinates(neutron) is False:
-                    print()
-                    print(b)
-                    print(white_won_hard)
-                    break
-            print()
-            print(b)
+            print("Player-1 🟡, move Neutron 🐹: ")
+            if b.enter_coordinates(neutron) is False:
+                self.print_b(b)
+                print(black_won)
+                break
+            self.print_b(b)
             # After moving neutron
-            if b.game_over(new) is True:
+            if b.game_over(counter) is True:
                 break
         print()
 
-    def start_game(self, version):
-        b = Board()
-        if version == 2 or version == 3:
-            new = 23
-            print("Player-1 - 🟡 | Player-2 - 🟣")
-        if version == 4 or version == 5:
-            new = 45
-            print("Player-1 - 🟣 | Player-2 - 🟡")
-        print()
-        print(b)
-        version = int(version)
+    def game_with_hard_computer_4_5(self, version, black_won, white_won):
+        counter = 45
         white = Figure.WHITE
         black = Figure.BLACK
         neutron = Figure.NEUTRON
+        b = Board()
+        print("Player-1 - 🟣 | Player-2 - 🟡")
+        self.print_b(b)
+        while True:
+            print()
+            print("Player-1 🟣, move a piece:")
+            input("Computer's move - Press enter  ")
+            b.hard_opponent_coordinates(black)
+            self.print_b(b)
+            print()
+            print("Player-2 🟡, move Neutron 🐹: ")
+            if version == 4:
+                if b.enter_coordinates(neutron) is False:
+                    self.print_b(b)
+                    print(black_won_hard)
+                    break
+            else:
+                input("Computer's move - Press enter  ")
+                if b.random_opponent_coordinates(neutron) is False:
+                    self.print_b(b)
+                    print(black_won_hard)
+                    break
+            self.print_b(b)
+            # After moving neutron
+            if b.game_over(counter) is True:
+                break
+            print("Player-2 🟡, move a piece: ")
+            if version == 4:
+                b.enter_coordinates(white)
+            else:
+                input("Computer's move - press enter  ")
+                b.random_opponent_coordinates(white)
+            self.print_b(b)
+            print()
+            print("Player-1 🟣, move Neutron 🐹: ")
+            input("Computer's move - Press enter  ")
+            if b.hard_opponent_coordinates(neutron) is False:
+                self.print_b(b)
+                print(white_won_hard)
+                break
+            self.print_b(b)
+            # After moving neutron
+            if b.game_over(counter) is True:
+                break
+
+    def print_b(self, b):
+        print()
+        print(b)
+
+    def start_game(self, version):
         white_won = "Player-2 has fallen into a trap and cannot move Neutron\
                     \n🟣 Player-2 🟣 is Looser\
                     \n🟡 Player-1 🟡 is WINNER"
@@ -263,17 +240,15 @@ class Game:
         white_won_hard = "Player-1 has fallen into a trap and cannot move Neutron\
                     \n🟣 Player-1 🟣 is Looser\
                     \n🟡 Player-2 🟡 is WINNER"
-        print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
-        while True:
-            print()
-            if version == 5:
-                print("Player-1 🟣, move a piece:")
-                input("Computer's move - Press enter  ")
-                b.hard_opponent_coordinates(black)
-            print()
-            print(b)
-            print()
-            # After moving neutron
-            if b.game_over(new) is True:
-                break
+        b = Board()
+        white = Figure.WHITE
+        black = Figure.BLACK
+        neutron = Figure.NEUTRON
         print()
+        print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
+        print()
+        if version == 2 or version == 3:
+            self.game_two_people_2_3(version, black_won, white_won)
+        else:
+            self.game_with_hard_computer_4_5(version, black_won_hard, white_won_hard)
+
