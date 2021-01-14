@@ -304,7 +304,7 @@ class Board:
                     while quit is True:
                         to_XY = self.random_toXY(figure, from_XY, 1, temp_to_XY_moves)
                         # return to_XY
-                        new_possible = temp_to_XY_moves.copy()
+                        new_possible = temp_to_XY_moves
                         to = self.move_pawns(from_XY, to_XY, 1)
                         if to is False and len(new_possible) != 1:
                             used = to_XY
