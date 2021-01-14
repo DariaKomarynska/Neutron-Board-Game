@@ -69,13 +69,13 @@ class Game:
             if version == 4:
                 if b.enter_coordinates(neutron) is False:
                     self.print_b(b)
-                    print(black_won_hard)
+                    print(black_won)
                     break
             else:
                 input("Computer's move - Press enter  ")
                 if b.random_opponent_coordinates(neutron) is False:
                     self.print_b(b)
-                    print(black_won_hard)
+                    print(black_won)
                     break
             self.print_b(b)
             # After moving neutron
@@ -93,7 +93,7 @@ class Game:
             input("Computer's move - Press enter  ")
             if b.hard_opponent_coordinates(neutron) is False:
                 self.print_b(b)
-                print(white_won_hard)
+                print(white_won)
                 break
             self.print_b(b)
             # After moving neutron

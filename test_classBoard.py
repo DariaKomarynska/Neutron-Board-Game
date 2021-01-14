@@ -306,3 +306,13 @@ def test_hard_opponent_coordinates():
     to_xy = board.hard_opponent_coordinates(figure)
     assert to_xy[1] == [5, 3]
 
+def test_hard_opponent_coordinates():
+    b = Board()
+
+    assert b.hard_opponent_coordinates(Figure.NEUTRON)
+
+
+def test_move_pawns():
+    b = Board()
+    assert b.move_pawns([1, 2], [1, 4], 1) is not False
+
