@@ -205,9 +205,3 @@ class Game:
             self.play_all_versions(start)
         elif start == 0:
             print("END")
-
-
-
-
-
-

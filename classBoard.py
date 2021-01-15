@@ -21,6 +21,10 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(3, 3, 3)
+        # self._board[4][5] = Pawn(1, 3, 3)
+        # self._board[2][1] = Pawn(2, 3, 3)
+        # self._board[1][5] = Empty()
+        # self._board[5][1] = Empty()
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -298,13 +302,14 @@ class Board:
                 return
             else:
                 temp_to_XY_moves = self.check_neutron_try_without_white_moves(figure, from_XY, possible_moves)
+                new_possible = temp_to_XY_moves.copy()
                 if len(temp_to_XY_moves) == 1:
                     to_XY = temp_to_XY_moves[0]
                 else:
                     while quit is True:
-                        to_XY = self.random_toXY(figure, from_XY, 1, temp_to_XY_moves)
+                        to_XY = self.random_toXY(figure, from_XY, 1, new_possible)
                         # return to_XY
-                        new_possible = temp_to_XY_moves
+
                         to = self.move_pawns(from_XY, to_XY, 1)
                         if to is False and len(new_possible) != 1:
                             used = to_XY
