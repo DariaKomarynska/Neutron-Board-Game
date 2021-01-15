@@ -19,7 +19,6 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
-        # self._board[5][3] = Empty()
         self._board[0][0] = "Y|X"
 
     def board(self):
