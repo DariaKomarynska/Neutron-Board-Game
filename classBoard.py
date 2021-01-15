@@ -19,6 +19,7 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
+        # self._board[5][3] = Empty()
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -298,7 +299,6 @@ class Board:
             else:
                 while quit is True:
                     to_XY = self.random_toXY(figure, from_XY, 1, new_possible)
-                    # return to_XY
 
                     to = self.move_pawns(from_XY, to_XY, 1)
                     if to is False and len(new_possible) != 1:
@@ -340,7 +340,7 @@ class Board:
                 return False
         return True
 
-    def game_over(self, ver):
+    def game_over(self, version):
         """
         Check.
         If the Neutron shows up on White back row, player1 have won the game.
@@ -349,7 +349,7 @@ class Board:
         for j in range(1, 6):
             if self._board[1][j]._figure == Figure.NEUTRON:
                 # ver - version of the game
-                if ver == 23:
+                if version == 23:
                     print("🟡 Player-1 🟡 is Looser")
                     print("🟣 Player-2 🟣 is WINNER")
                     return True
@@ -358,7 +358,7 @@ class Board:
                     print("🟣 Player-1 🟣 is WINNER")
                     return True
             elif self._board[5][j]._figure == Figure.NEUTRON:
-                if ver == 23:
+                if version == 23:
                     print("🟣 Player-2 🟣 is Looser", "\n🟡 Player-1 🟡 is WINNER")
                     return True
                 else:
