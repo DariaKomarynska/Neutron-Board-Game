@@ -274,64 +274,60 @@ class Board:
                 break
         return [temp_fromXY, toXY]
 
+    def choose_move_black_hard(self, figure, from_XY):
+        coordinates_moving = self.hard_opponent_coordinates_toXY_black(figure, from_XY)
+        from_XY = coordinates_moving[0]
+        to_XY = coordinates_moving[1]
+        print(from_XY)
+        print(to_XY)
+        print(self.get_pawn_moves(from_XY[0], from_XY[1]))
+        self.move_pawns(from_XY, to_XY, 0)
+
+    def choose_move_neutron_hard(self, figure, from_XY):
+        quit = True
+        possible_moves = self.get_pawn_moves(from_XY[0], from_XY[1])
+        if self.hard_victory_toXY_neutron(from_XY, possible_moves) is not False:
+            to_XY = self.hard_victory_toXY_neutron(from_XY, possible_moves)
+            self.move_pawns(from_XY, to_XY, 0)
+            return
+        else:
+            temp_to_XY_moves = self.check_neutron_try_without_white_moves(figure, from_XY, possible_moves)
+            new_possible = temp_to_XY_moves.copy()
+            if len(temp_to_XY_moves) == 1:
+                to_XY = temp_to_XY_moves[0]
+            else:
+                while quit is True:
+                    to_XY = self.random_toXY(figure, from_XY, 1, new_possible)
+                    # return to_XY
+
+                    to = self.move_pawns(from_XY, to_XY, 1)
+                    if to is False and len(new_possible) != 1:
+                        used = to_XY
+                        new_possible.remove(used)
+                        continue
+
+                    elif to is False and len(new_possible) == 1:
+                        to_XY = new_possible[0]
+                        quit = False
+                        break
+                    else:
+                        quit = False
+                        return
+
     def hard_opponent_coordinates(self, figure):
         """
         Computer chooses best coordinates for "From X Y" and "To X Y".
         """
-        quit = True
         pawns = self.get_list_of_pawns(figure)
         from_XY = self.random_fromXY(figure, pawns)
         if from_XY is False:
             return False
-        possible_moves = self.get_pawn_moves(from_XY[0], from_XY[1])
+
         if figure == Figure.BLACK:
-            coordinates_moving = self.hard_opponent_coordinates_toXY_black(figure, from_XY)
-            from_XY = coordinates_moving[0]
-            to_XY = coordinates_moving[1]
-            print(from_XY)
-            print(to_XY)
-            print(self.get_pawn_moves(from_XY[0], from_XY[1]))
-            self.move_pawns(from_XY, to_XY, 0)
+            self.choose_move_black_hard(figure, from_XY)
+
         else:
-            if self.hard_victory_toXY_neutron(from_XY, possible_moves) is not False:
-                to_XY = self.hard_victory_toXY_neutron(from_XY, possible_moves)
-                self.move_pawns(from_XY, to_XY, 0)
-                return
-            else:
-                temp_to_XY_moves = self.check_neutron_try_without_white_moves(figure, from_XY, possible_moves)
-                new_possible = temp_to_XY_moves.copy()
-                if len(temp_to_XY_moves) == 1:
-                    to_XY = temp_to_XY_moves[0]
-                else:
-                    while quit is True:
-                        to_XY = self.random_toXY(figure, from_XY, 1, new_possible)
-                        # return to_XY
-
-                        to = self.move_pawns(from_XY, to_XY, 1)
-                        if to is False and len(new_possible) != 1:
-                            used = to_XY
-                            new_possible.remove(used)
-                            continue
-
-                        elif to is False and len(new_possible) == 1:
-                            to_XY = new_possible[0]
-                            quit = False
-                            break
-                        else:
-                            quit = False
-                            return
-            self.move_pawns(from_XY, to_XY, 0)
-
-    def move_neutron(self, figure, from_XY, possible):
-        to_XY = self.hard_victory_toXY_neutron(from_XY, possible)
-        if self.hard_victory_toXY_neutron(from_XY, possible) is not False:
-            to_XY = self.hard_victory_toXY_neutron(from_XY, possible)
-        temp_to_XY_moves = self.check_neutron_try_without_white_moves(figure, from_XY, possible)
-        if len(temp_to_XY_moves) == 1:
-            to_XY = temp_to_XY_moves[0]
-        else:
-            to_XY = self.random_toXY(figure, from_XY, 1, temp_to_XY_moves)
-        return to_XY
+            self.choose_move_neutron_hard(figure, from_XY)
 
     def check_neutron_next_step(self, new_from_XY):
         next_moves = self.get_pawn_moves(new_from_XY[0], new_from_XY[1])
@@ -343,8 +339,6 @@ class Board:
             if i[1] == 5:
                 return False
         return True
-
-    # def check_neutron_next_step_white(self, new_from_XY):
 
     def game_over(self, ver):
         """
