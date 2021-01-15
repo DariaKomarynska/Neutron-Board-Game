@@ -37,6 +37,7 @@ def test_present_neutron():
     pawn = Pawn(3, 2, 2)
     assert str(pawn) == "🐹"
 
+
 def test_get_moves_beginning():
     pawn = Pawn(2, 3, 5)
     board = Board()
@@ -57,6 +58,7 @@ def test_get_moves_middle_of_the_game1():
         [4, 2],
     ]
 
+
 def test_get_moves_middle_of_the_game2():
     pawn = Pawn(1, 2, 4)
     board = Board()
@@ -71,7 +73,9 @@ def test_get_moves_middle_of_the_game2():
     board._board[1][3] = Pawn(0, 3, 1)
     board._board[2][4] = Pawn(1, 4, 2)
     board._board[5][4] = Pawn(0, 4, 5)
-    assert pawn.get_moves(board, 2, 4) == [[1, 4], [5, 4], [2, 5], [1, 3], [3, 3]]
+    assert pawn.get_moves(board, 2, 4) == [
+        [1, 4], [5, 4], [2, 5], [1, 3], [3, 3]
+        ]
 
 
 def test_get_moves_middle_of_the_game3():
@@ -88,7 +92,9 @@ def test_get_moves_middle_of_the_game3():
     board._board[2][3] = Pawn(2, 3, 2)
     board._board[1][5] = Pawn(2, 5, 1)
     board._board[3][2] = Pawn(3, 2, 3)
-    assert pawn.get_moves(board, 4, 2) == [[5, 2], [4, 5], [3, 3], [5, 3], [3, 1]]
+    assert pawn.get_moves(board, 4, 2) == [
+        [5, 2], [4, 5], [3, 3], [5, 3], [3, 1]
+        ]
 
 
 def test_get_moves_middle_of_the_game4():

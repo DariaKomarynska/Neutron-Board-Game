@@ -2,8 +2,6 @@ from classEmpty import Empty
 from classFigure import Figure
 from classPawn import Pawn
 from random import choice
-from random import choices
-import copy
 
 
 class Board:
@@ -20,11 +18,7 @@ class Board:
         for j in range(1, 6):
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
-        self._board[3][3] = Pawn(3, 3, 3)
-        # self._board[4][5] = Pawn(1, 3, 3)
-        # self._board[2][1] = Pawn(2, 3, 3)
-        # self._board[1][5] = Empty()
-        # self._board[5][1] = Empty()
+        self._board[3][3] = Pawn(neutron, 3, 3)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -96,7 +90,10 @@ class Board:
             # Check: is input element digit?
             coordinates[0] = int(coordinates[0])
             coordinates[1] = int(coordinates[1])
-            if coordinates[0] not in range(1, 6) or coordinates[1] not in range(1, 6):
+            if (
+                coordinates[0] not in range(1, 6)
+                or coordinates[1] not in range(1, 6)
+            ):
                 # Check: is input element 1,2,3,4,5?
                 return False
             return True
@@ -129,21 +126,21 @@ class Board:
     def input_and_check_coordinates(self, figure, from_to):
         quit = True
         while quit:
-            coordinates = self.input_coordinates(from_to)
+            coord = self.input_coordinates(from_to)
             if (
                 (
                     from_to == 1
-                    and self.check_given_coordinates(coordinates)
-                    and self.check_choosen_figure_on_the_board(figure, coordinates[0], coordinates[1])
+                    and self.check_given_coordinates(coord)
+                    and self.check_choosen_figure_on_the_board(figure, coord[0], coord[1])
                 )
-                or (from_to == 0 and self.check_given_coordinates(coordinates))
+                or (from_to == 0 and self.check_given_coordinates(coord))
             ):
                 quit = False
                 break
             else:
                 print("Try again!")
                 quit = True
-        return coordinates
+        return coord
 
     def choose_correct_fromXY(self, figure):
         quit = True

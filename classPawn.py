@@ -4,7 +4,7 @@ from errors import NotIntegerError, IncorrectNumberError
 
 class Pawn:
     """
-    General class for figures in the board.
+    General class for all figures on the board.
     """
 
     CODE = "pawn"
@@ -46,6 +46,7 @@ class Pawn:
 
     def check_horizontally_vertically(self, board, x, y, hor_ver, direction):
         """
+        Hor_ver:
         Horizontally - 1: left (-1) or right (1)
         Vertically   - 0: up (-1)   or down (1)
         """
@@ -53,12 +54,14 @@ class Pawn:
         j = direction
         i = x + j if hor_ver == 1 else y + j
         while 1 <= i <= 5:
-            figure = board.get_figure(i, y) if hor_ver == 1 else board.get_figure(x, i)
+            figure = board.get_figure(i, y) if hor_ver == 1 \
+                else board.get_figure(x, i)
             if figure == self._figure:
                 break
             if figure != Figure.EMPTY:
                 break
-            temp_moves.append([i, y]) if hor_ver == 1 else temp_moves.append([x, i])
+            temp_moves.append([i, y]) if hor_ver == 1 \
+                else temp_moves.append([x, i])
             i += j
         if len(temp_moves) != 0:
             unique_step = []
@@ -80,7 +83,9 @@ class Pawn:
     def check_vertically_down(self, board, x, y):
         return self.check_horizontally_vertically(board, x, y, 0, 1)
 
-    def check_diagonally_up_down_left_right(self, board, x, y, updown, direction):
+    def check_diagonally_up_down_left_right(
+        self, board, x, y, updown, direction
+    ):
         """
         Diagonally down (y + 1):  left (-1) or right (1)
         Diagonally up   (y - 1):  left (-1) or right (1)
@@ -130,7 +135,7 @@ class Pawn:
             self.check_diagonally_down_left(board, x, y),
             self.check_diagonally_down_right(board, x, y),
             self.check_diagonally_up_left(board, x, y),
-            self.check_diagonally_up_right(board, x, y)
+            self.check_diagonally_up_right(board, x, y),
         ]
         final_moves = []
         for i in temp_moves:
