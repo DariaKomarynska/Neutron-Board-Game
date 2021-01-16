@@ -7,7 +7,6 @@ from errors import MoveEmptyError
 def test_definition_empty_figure():
     empty = Empty()
     assert empty.figure() == 0
-    assert empty.CODE == "empty"
 
 
 def test_get_moves_for_empty():

@@ -10,7 +10,6 @@ def test_create_pawn():
     assert pawn.figure() == 1
     assert pawn.row() == 3
     assert pawn.column() == 1
-    assert pawn.CODE == "pawn"
 
 
 def test_incorrect_row():
@@ -143,7 +142,7 @@ def test_get_moves_neutron_zero_moves():
     assert pawn.get_moves(board, 3, 2) == []
 
 
-def test_get_moves_for_empty():
-    pawn = Pawn(0, 3, 2)
-    board = Board()
-    assert pawn.get_moves(board, 3, 2) == []
+# def test_get_moves_for_empty():
+#     pawn = Pawn(0, 3, 2)
+#     board = Board()
+#     assert pawn.get_moves(board, 3, 2) == []
