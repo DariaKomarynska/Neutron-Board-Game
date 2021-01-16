@@ -7,8 +7,6 @@ class Empty:
     Empty figure in the board - "o".
     """
 
-    CODE = "empty"
-
     def __init__(self):
         self._figure = Figure.EMPTY
 

@@ -347,59 +347,68 @@ class Board:
         """
         Hard computer makes move of black pawn
         """
-        coordinates_moving = self.hard_coordinates_start_end_black(figure, from_xy)
+        coordinates_moving = self.hard_coordinates_start_end_black(
+            figure, from_xy
+            )
         from_xy = coordinates_moving[0]
         to_xy = coordinates_moving[1]
         print(self.get_pawn_moves(from_xy[0], from_xy[1]))
         self.move_pawns(from_xy, to_xy, 0)
 
-    def choose_move_neutron_hard(self, figure, from_xy):
+    def hard_make_move_neutron(self, figure, from_xy):
+        """
+        Hard computer makes move of neutron with checking this move
+        Choose move to prevent loosing in this and also in the next step
+        """
         quit = True
-        possible_moves = self.get_pawn_moves(from_xy[0], from_xy[1])
-        if self.hard_victory_to_xy_neutron(possible_moves) is not False:
-            to_XY = self.hard_victory_to_xy_neutron(possible_moves)
-            self.move_pawns(from_xy, to_XY, 0)
+        possible = self.get_pawn_moves(from_xy[0], from_xy[1])
+        if self.hard_victory_to_xy_neutron(possible) is not False:
+            to_xy = self.hard_victory_to_xy_neutron(possible)
+            self.move_pawns(from_xy, to_xy, 0)
             return
         else:
-            temp_to_XY_moves = self.neutron_looks_moves_not_on_white(possible_moves)
-            new_possible = temp_to_XY_moves.copy()
-            if len(temp_to_XY_moves) == 1:
-                to_XY = temp_to_XY_moves[0]
+            temp_to_xy_moves = self.neutron_looks_moves_not_on_white(possible)
+            new_possible = temp_to_xy_moves.copy()
+            if len(temp_to_xy_moves) == 1:
+                to_xy = temp_to_xy_moves[0]
             else:
                 while quit is True:
-                    to_XY = self.random_to_xy(figure, from_XY, 1, new_possible)
+                    to_xy = self.random_to_xy(figure, from_xy, 1, new_possible)
 
-                    to = self.move_pawns(from_XY, to_XY, 1)
+                    to = self.move_pawns(from_xy, to_xy, 1)
                     if to is False and len(new_possible) != 1:
-                        used = to_XY
+                        used = to_xy
                         new_possible.remove(used)
                         continue
 
                     elif to is False and len(new_possible) == 1:
-                        to_XY = new_possible[0]
+                        to_xy = new_possible[0]
                         quit = False
                         break
                     else:
                         quit = False
                         return
 
-    def hard_opponent_coordinates(self, figure):
+    def hard_computer_makes_move(self, figure):
         """
-        Computer chooses best coordinates for "From X Y" and "To X Y".
+        Computer chooses best coordinates for black pawn or neutron
         """
         pawns = self.get_list_of_pawns(figure)
-        from_XY = self.random_from_xy(figure, pawns)
-        if from_XY is False:
+        from_xy = self.random_from_xy(figure, pawns)
+        if from_xy is False:
             return False
 
         if figure == Figure.BLACK:
-            self.hard_make_move_black(figure, from_XY)
+            self.hard_make_move_black(figure, from_xy)
 
         else:
-            self.choose_move_neutron_hard(figure, from_XY)
+            self.hard_make_move_neutron(figure, from_xy)
 
-    def check_neutron_next_step(self, new_from_XY):
-        next_moves = self.get_pawn_moves(new_from_XY[0], new_from_XY[1])
+    def check_neutron_next_step(self, new_from_xy):
+        """
+        Check neutron loosing move can be next laboratoria
+        """
+        next_moves = self.get_pawn_moves(new_from_xy[0], new_from_xy[1])
         bad_moves = []
         for move in next_moves:
             if move[1] == 5:
@@ -414,6 +423,8 @@ class Board:
         Check.
         If the Neutron shows up on White back row, player1 have won the game.
         If the Neutron shows up on Black back row, player2 have won the game.
+        ----
+        version : version of the game 2/3 ot 4/5
         """
         for j in range(1, 6):
             if self._board[1][j]._figure == Figure.NEUTRON:

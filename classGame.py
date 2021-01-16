@@ -126,7 +126,7 @@ class Game:
             print()
             print("Player-1 🟣, move a piece:")
             input("Computer's move - Press enter  ")
-            board.hard_opponent_coordinates(black)
+            board.hard_computer_makes_move(black)
             self.print_b(board)
             print()
             print("Player-2 🟡, move Neutron 🐹: ")
@@ -155,7 +155,7 @@ class Game:
             print()
             print("Player-1 🟣, move Neutron 🐹: ")
             input("Computer's move - Press enter  ")
-            if board.hard_opponent_coordinates(neutron) is False:
+            if board.hard_computer_makes_move(neutron) is False:
                 self.print_b(board)
                 print(white_won)
                 break
