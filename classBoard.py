@@ -23,6 +23,14 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
+        # self._board[1][4] = Empty()
+        # self._board[3][3] = Empty()
+        # self._board[5][1] = Empty()
+        # self._board[5][4] = Empty()
+        # self._board[4][4] = Pawn(1, 4, 4)
+        # self._board[2][1] = Pawn(2, 2, 4)
+        # self._board[4][2] = Pawn(2, 2, 4)
+        # self._board[4][5] = Pawn(3, 5, 4)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -86,7 +94,7 @@ class Board:
         coord = list((input(your_xy)).split())
         return coord
 
-    def start_xy_for_neutron(self, figure):
+    def start_xy_for_neutron(self):
         """Gets start coordinates from the board for neutron"""
         figure = Figure.NEUTRON
         for j in range(1, 6):
@@ -172,7 +180,9 @@ class Board:
                 (
                     from_to == 1
                     and self.check_given_coordinates(coord)
-                    and self.check_choosen_figure_on_the_board(figure, coord[0], coord[1])
+                    and self.check_choosen_figure_on_the_board(
+                        figure, coord[0], coord[1]
+                    )
                 )
                 or (from_to == 0 and self.check_given_coordinates(coord))
             ):
@@ -198,7 +208,7 @@ class Board:
                     quit = False
                     break
             else:
-                from_xy = self.start_xy_for_neutron(figure)
+                from_xy = self.start_xy_for_neutron()
                 if not self.check_not_zero_moves(figure, from_xy):
                     return False
                 else:
@@ -311,7 +321,9 @@ class Board:
         """
         for j in range(1, 6):
             on_white = [j, 5]
-            if self.get_pawn_moves(from_xy[0], from_xy[1]).count(on_white) == 1:
+            if self.get_pawn_moves(
+                from_xy[0], from_xy[1]
+            ).count(on_white) == 1:
                 to_xy = on_white
                 return to_xy
         else:
@@ -406,7 +418,7 @@ class Board:
 
     def check_neutron_next_step(self, new_from_xy):
         """
-        Check neutron loosing move can be next laboratoria
+        Check : neutron can have loosing move next step
         """
         next_moves = self.get_pawn_moves(new_from_xy[0], new_from_xy[1])
         bad_moves = []
@@ -421,10 +433,10 @@ class Board:
     def game_over(self, version):
         """
         Check.
-        If the Neutron shows up on White back row, player1 have won the game.
-        If the Neutron shows up on Black back row, player2 have won the game.
+        If Neutron shows up on White back row, player1 have won the game.
+        If Neutron shows up on Black back row, player2 have won the game.
         ----
-        version : version of the game 2/3 ot 4/5
+        version : version of the game 2/3 or 4/5
         """
         for j in range(1, 6):
             if self._board[1][j]._figure == Figure.NEUTRON:

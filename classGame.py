@@ -3,13 +3,21 @@ from classBoard import Board
 
 
 class Game:
+    """
+    Class Game. It presents game with text interface in terminal.
+    """
 
     def print_b(self, board):
+        """Prints new line and then gameboard"""
         print()
         print(board)
 
     def start_choice_print(self, board, place):
-        # Start game from rules or play now
+        """
+        Starts game from rules or chooses version of game
+        ----
+        place : in the beginning (1) or after rules (0)
+        """
         if place == 1:
             print("The Game of Neutron\nStart new game!")
             self.print_b(board)
@@ -26,6 +34,9 @@ class Game:
             print("If you don't want to play, enter '0'")
 
     def rules_print(self):
+        """
+        Presents rules with new lines before and after
+        """
         print(
             "RULES\
         \nWinning the game is simple.\
@@ -45,6 +56,14 @@ class Game:
         print()
 
     def choose_correctly(self, place):
+        """
+        Checks input element - choice
+        -Is number of input elements one?
+        -Is input element digit?
+        -Is an element 1 or 0, 2-5?
+        ----
+        place : in the beginning (1) or after rules (0)
+        """
         quit = True
         while quit:
             # Check: is input number correct?
@@ -70,11 +89,24 @@ class Game:
                 print("Try again")
         return start
 
-    def game_two_people_light_2_3(self, version, white, black, neutron, black_won, white_won):
+    def game_two_people_light_2_3(
+        self, version, white, black, neutron, black_won, white_won
+    ):
+        """
+        Presents text interface for game's versions 2 or 3
+        ----
+        version : human - human (2) or human - light random computer (3)
+        white   : white pawn
+        black   : black pawn
+        neutron : figure neutron
+        black_won : text about black pawn's victory
+        white_won : text about white pawn's victory
+        """
         gen_version = 23
         board = Board()
         print("Player-1 - 🟡 | Player-2 - 🟣")
         print(board)
+        print(board._board[3][3]._figure)
         while True:
             print()
             print("Player-1 🟡, move a piece:")
@@ -117,7 +149,19 @@ class Game:
                 break
         print()
 
-    def game_with_hard_computer_4_5(self, version, white, black, neutron, black_won, white_won):
+    def game_with_hard_computer_4_5(
+        self, version, white, black, neutron, black_won, white_won
+    ):
+        """
+        Presents text interface for game's versions 4 or 5
+        ----
+        version : hard computer - human(4) or hard computer - light computer(5)
+        white   : white pawn
+        black   : black pawn
+        neutron : figure neutron
+        black_won : text about black pawn's victory
+        white_won : text about white pawn's victory
+        """
         gen_version = 45
         board = Board()
         print("Player-1 - 🟣 | Player-2 - 🟡")
@@ -165,6 +209,9 @@ class Game:
                 break
 
     def play_all_versions(self, version):
+        """
+        Presents different versions of the game
+        """
         white_won = "Player-2 has fallen into a trap and cannot move Neutron\
                     \n🟣 Player-2 🟣 is Looser\
                     \n🟡 Player-1 🟡 is WINNER"
@@ -189,6 +236,10 @@ class Game:
             self.game_with_hard_computer_4_5(version, white, black, neutron, black_won_hard, white_won_hard)
 
     def start_rules_game(self):
+        """
+        Starts different versions of the game
+        from the beginning with rules and to the end
+        """
         board = Board()
         self.start_choice_print(board, 1)
         start = self.choose_correctly(1)
@@ -199,7 +250,7 @@ class Game:
         if start == 2 or start == 3 or start == 4 or start == 5:
             # 2 if start the game between two people
             # 3 if start the game between human and light computer
-            # 4 if start the game between human and hard computer
+            # 4 if start the game between hard computer and human
             # 5 if start the game between hard and light computers
             self.play_all_versions(start)
         elif start == 0:

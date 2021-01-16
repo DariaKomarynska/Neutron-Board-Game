@@ -14,7 +14,11 @@ class Empty:
         return self._figure
 
     def get_moves(self, board, x, y):
+        """
+        Empty cannot move
+        """
         raise MoveEmptyError("INCORRECT CHOICE")
 
     def __str__(self):
+        """Presents empty place on the gameboard"""
         return " o"
