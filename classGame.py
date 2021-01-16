@@ -78,18 +78,18 @@ class Game:
         while True:
             print()
             print("Player-1 🟡, move a piece:")
-            board.enter_coordinates(white)
+            board.human_makes_move(white)
             self.print_b(board)
             print()
             print("Player-2 🟣, move Neutron 🐹: ")
             if version == 2:
-                if board.enter_coordinates(neutron) is False:
+                if board.human_makes_move(neutron) is False:
                     self.print_b(board)
                     print(white_won)
                     break
             else:
                 input("Computer's move - Press enter  ")
-                if board.random_opponent_coordinates(neutron) is False:
+                if board.randomly_makes_move(neutron) is False:
                     self.print_b(board)
                     print(white_won)
                     break
@@ -100,14 +100,14 @@ class Game:
                 break
             print("Player-2 🟣, move a piece: ")
             if version == 2:
-                board.enter_coordinates(black)
+                board.human_makes_move(black)
             else:
                 input("Computer's move - press enter  ")
-                board.random_opponent_coordinates(black)
+                board.randomly_makes_move(black)
             self.print_b(board)
             print()
             print("Player-1 🟡, move Neutron 🐹: ")
-            if board.enter_coordinates(neutron) is False:
+            if board.human_makes_move(neutron) is False:
                 self.print_b(board)
                 print(black_won)
                 break
@@ -131,13 +131,13 @@ class Game:
             print()
             print("Player-2 🟡, move Neutron 🐹: ")
             if version == 4:
-                if board.enter_coordinates(neutron) is False:
+                if board.human_makes_move(neutron) is False:
                     self.print_b(board)
                     print(black_won)
                     break
             else:
                 input("Computer's move - Press enter  ")
-                if board.random_opponent_coordinates(neutron) is False:
+                if board.randomly_makes_move(neutron) is False:
                     self.print_b(board)
                     print(black_won)
                     break
@@ -147,10 +147,10 @@ class Game:
                 break
             print("Player-2 🟡, move a piece: ")
             if version == 4:
-                board.enter_coordinates(white)
+                board.human_makes_move(white)
             else:
                 input("Computer's move - press enter  ")
-                board.random_opponent_coordinates(white)
+                board.randomly_makes_move(white)
             self.print_b(board)
             print()
             print("Player-1 🟣, move Neutron 🐹: ")
