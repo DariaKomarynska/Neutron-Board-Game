@@ -1,5 +1,4 @@
 from classFigure import Figure
-# import pytest
 
 
 def test_define_empty_figure():

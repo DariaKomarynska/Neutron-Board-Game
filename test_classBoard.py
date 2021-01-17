@@ -254,7 +254,11 @@ def test_get_list_of_pawns_another():
     assert result == [[1, 1], [2, 1], [3, 1], [3, 2], [4, 1]]
 
 
-# input_and_check_coordinates
+def test_input_and_check_coordinates(monkeypatch):
+    board = Board()
+    monkeypatch.setattr('builtins.input', lambda _: "1 5")
+    result = board.input_and_check_coordinates(Figure.WHITE, 1)
+    assert result == [1, 5]
 
 
 def test_choose_correct_from_xy_white(monkeypatch):
@@ -275,11 +279,55 @@ def test_choose_correct_from_xy_neutron():
     board = Board()
     board._board[3][3] = Pawn(2, 3, 3)
     board._board[2][4] = Pawn(3, 4, 2)
+    board._board[1][1] = Empty()
+    board._board[5][1] = Empty()
+    board._board[5][2] = Empty()
+    board._board[5][3] = Empty()
+    board._board[5][5] = Empty()
+    board._board[2][2] = Pawn(1, 2, 2)
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[3][2] = Pawn(2, 2, 3)
+    board._board[3][4] = Pawn(2, 4, 3)
+    board._board[2][4] = Pawn(2, 4, 2)
+    board._board[2][3] = Pawn(3, 3, 2)
     result = board.choose_correct_from_xy(Figure.NEUTRON)
-    assert result == [4, 2]
+    assert result is False
 
-# choose_correct_to_xy
-# human_makes_move
+
+def test_choose_correct_to_xy_white(monkeypatch):
+    board = Board()
+    monkeypatch.setattr('builtins.input', lambda _: "4 5")
+    result = board.choose_correct_from_xy(Figure.WHITE)
+    assert result == [4, 5]
+
+
+def test_choose_correct_to_xy_neutron(monkeypatch):
+    board = Board()
+    board._board[5][5] = Empty()
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[2][4] = Pawn(3, 4, 2)
+    monkeypatch.setattr('builtins.input', lambda _: "1 2")
+    result = board.choose_correct_to_xy(Figure.NEUTRON, [4, 2])
+    assert result == [1, 2]
+
+
+def test_human_makes_move_false_neutron():
+    board = Board()
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[2][4] = Pawn(3, 4, 2)
+    board._board[1][1] = Empty()
+    board._board[5][1] = Empty()
+    board._board[5][2] = Empty()
+    board._board[5][3] = Empty()
+    board._board[5][5] = Empty()
+    board._board[2][2] = Pawn(1, 2, 2)
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[3][2] = Pawn(2, 2, 3)
+    board._board[3][4] = Pawn(2, 4, 3)
+    board._board[2][4] = Pawn(2, 4, 2)
+    board._board[2][3] = Pawn(3, 3, 2)
+    result = board.human_makes_move(Figure.NEUTRON)
+    assert result is False
 
 
 def test_random_from_xy_black(monkeypatch):
@@ -330,35 +378,79 @@ def test_random_to_xy_neutron(monkeypatch):
     assert result == [1, 3]
 
 
-# randomly_makes_move
-# hard_victory_to_xy_neutron
-# neutron_looks_moves_not_on_white
-# hard_check_black_goes_on_white
-
-def test_hard_opponent_coordinates_to_xy_black():
+def test_randomly_makes_move_neutron_false():
     board = Board()
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[2][4] = Pawn(3, 4, 2)
+    board._board[1][1] = Empty()
+    board._board[5][1] = Empty()
     board._board[5][2] = Empty()
-    board._board[4][1] = Pawn(2, 1, 4)
-    figure = Figure.BLACK
-    fromXY = [2, 1]
-    to_xy = board.hard_opponent_coordinates_to_xy_black(figure, fromXY)
-    assert to_xy[1] == [2, 5]
+    board._board[5][3] = Empty()
+    board._board[5][5] = Empty()
+    board._board[2][2] = Pawn(1, 2, 2)
+    board._board[3][3] = Pawn(2, 3, 3)
+    board._board[3][2] = Pawn(2, 2, 3)
+    board._board[3][4] = Pawn(2, 4, 3)
+    board._board[2][4] = Pawn(2, 4, 2)
+    board._board[2][3] = Pawn(3, 3, 2)
+    result = board.randomly_makes_move(Figure.NEUTRON)
+    assert result is False
 
 
-def test_hard_opponent_coordinates():
+def test_hard_victory_to_xy_neutron_isvictory():
     board = Board()
-    figure = Figure.BLACK
-    fromXY = [3, 1]
-    # def new_result(a):
-    #     res = [5, 3]
-    #     return res
-    # monkeypatch.setattr('classBoard.choice', new_result)
-    to_xy = board.hard_opponent_coordinates(figure)
-    assert to_xy[1] == [5, 3]
-
-def test_hard_opponent_coordinates():
-    b = Board()
-
-    assert b.hard_opponent_coordinates(Figure.NEUTRON)
+    board._board[1][5] = Empty()
+    board._board[4][5] = Pawn(1, 5, 4)
+    possible = board.get_pawn_moves(3, 3)
+    result = board.hard_victory_to_xy_neutron(possible)
+    assert result == [5, 1]
 
 
+def test_hard_victory_to_xy_neutron_not_victory():
+    board = Board()
+    possible = board.get_pawn_moves(3, 3)
+    result = board.hard_victory_to_xy_neutron(possible)
+    assert result is False
+
+
+def test_neutron_looks_moves_not_on_white():
+    board = Board()
+    possible = board.get_pawn_moves(3, 3)
+    board._board[5][5] = Empty()
+    board._board[2][5] = Pawn(1, 5, 2)
+    result = board.neutron_looks_moves_not_on_white(possible)
+    assert result == [[1, 3], [5, 3], [3, 2], [3, 4], [2, 4], [4, 4], [2, 2], [4, 2]]
+
+
+def test_hard_check_black_goes_on_white_there_is_not():
+    board = Board()
+    result = board.hard_check_black_goes_on_white([2, 1])
+    assert result is False
+
+
+def test_hard_check_black_goes_on_white_there_is_():
+    board = Board()
+    board._board[5][5] = Empty()
+    board._board[4][4] = Pawn(2, 4, 4)
+    result = board.hard_check_black_goes_on_white([5, 1])
+    assert result == [5, 5]
+
+
+def test_check_neutron_next_step_is_white():
+    board = Board()
+    board._board[5][5] = Empty()
+    board._board[4][4] = Pawn(2, 4, 4)
+    board._board[3][3] = Empty()
+    board._board[3][5] = Pawn(3, 5, 3)
+    result = board.check_neutron_next_step([5, 3])
+    assert result is False
+
+
+def test_game_over():
+    board = Board()
+    board._board[3][3] = Empty()
+    board._board[5][5] = Pawn(3, 5, 5)
+    board._board[4][4] = Pawn(2, 4, 4)
+    board._board[1][4] = Empty()
+    result = board.game_over(23)
+    assert result is True

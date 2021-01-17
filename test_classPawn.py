@@ -59,25 +59,6 @@ def test_get_moves_middle_of_the_game1():
 
 
 def test_get_moves_middle_of_the_game2():
-    pawn = Pawn(1, 2, 4)
-    board = Board()
-    board._board[2][1] = Pawn(2, 1, 2)
-    board._board[3][2] = Pawn(3, 2, 3)
-    board._board[5][2] = Pawn(0, 2, 5)
-    board._board[4][2] = Pawn(1, 2, 4)
-    board._board[1][5] = Pawn(2, 5, 1)
-    board._board[3][3] = Pawn(0, 3, 3)
-    board._board[5][5] = Pawn(0, 5, 5)
-    board._board[2][3] = Pawn(2, 3, 2)
-    board._board[1][3] = Pawn(0, 3, 1)
-    board._board[2][4] = Pawn(1, 4, 2)
-    board._board[5][4] = Pawn(0, 4, 5)
-    assert pawn.get_moves(board, 2, 4) == [
-        [1, 4], [5, 4], [2, 5], [1, 3], [3, 3]
-        ]
-
-
-def test_get_moves_middle_of_the_game3():
     pawn = Pawn(1, 4, 2)
     board = Board()
     board._board[5][5] = Empty()
@@ -96,7 +77,7 @@ def test_get_moves_middle_of_the_game3():
         ]
 
 
-def test_get_moves_middle_of_the_game4():
+def test_get_moves_middle_of_the_game3():
     pawn = Pawn(1, 2, 3)
     board = Board()
     board._board[5][5] = Empty()
@@ -110,22 +91,6 @@ def test_get_moves_middle_of_the_game4():
     board._board[1][5] = Pawn(2, 5, 1)
     board._board[3][2] = Pawn(3, 2, 3)
     assert pawn.get_moves(board, 2, 3) == [[1, 3], [2, 2], [1, 4], [4, 5]]
-
-
-def test_get_moves_middle_of_the_game5():
-    pawn = Pawn(1, 2, 3)
-    board = Board()
-    board._board[5][5] = Empty()
-    board._board[1][3] = Empty()
-    board._board[5][4] = Empty()
-    board._board[5][2] = Empty()
-    board._board[3][3] = Pawn(1, 3, 3)
-    board._board[4][2] = Pawn(1, 2, 4)
-    board._board[2][1] = Pawn(2, 1, 2)
-    board._board[2][3] = Pawn(2, 3, 2)
-    board._board[1][5] = Pawn(2, 5, 1)
-    board._board[3][2] = Pawn(3, 2, 3)
-    assert not pawn.get_moves(board, 5, 2) == [[1, 3], [2, 2], [1, 4], [4, 5]]
 
 
 def test_get_moves_neutron_zero_moves():

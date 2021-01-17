@@ -106,7 +106,6 @@ class Game:
         board = Board()
         print("Player-1 - 🟡 | Player-2 - 🟣")
         print(board)
-        print(board._board[3][3]._figure)
         while True:
             print()
             print("Player-1 🟡, move a piece:")

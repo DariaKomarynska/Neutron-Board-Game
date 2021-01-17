@@ -23,14 +23,6 @@ class Board:
             self._board[0][j] = f"{j} "
             self._board[j][0] = f" {j}"
         self._board[3][3] = Pawn(neutron, 3, 3)
-        # self._board[1][4] = Empty()
-        # self._board[3][3] = Empty()
-        # self._board[5][1] = Empty()
-        # self._board[5][4] = Empty()
-        # self._board[4][4] = Pawn(1, 4, 4)
-        # self._board[2][1] = Pawn(2, 2, 4)
-        # self._board[4][2] = Pawn(2, 2, 4)
-        # self._board[4][5] = Pawn(3, 5, 4)
         self._board[0][0] = "Y|X"
 
     def board(self):
@@ -169,22 +161,24 @@ class Board:
                     pawns.append([x, y])
         return pawns
 
-    def input_and_check_coordinates(self, figure, from_to):
+    def input_and_check_coordinates(self, figure, from_or_to):
         """
         Input coordinates until they are correct
+        ----
+        from_or_to : choose from_xy (1) or to_xy (0)
         """
         quit = True
         while quit:
-            coord = self.input_coordinates(from_to)
+            coord = self.input_coordinates(from_or_to)
             if (
                 (
-                    from_to == 1
+                    from_or_to == 1
                     and self.check_given_coordinates(coord)
                     and self.check_choosen_figure_on_the_board(
                         figure, coord[0], coord[1]
                     )
                 )
-                or (from_to == 0 and self.check_given_coordinates(coord))
+                or (from_or_to == 0 and self.check_given_coordinates(coord))
             ):
                 quit = False
                 break
@@ -294,9 +288,9 @@ class Board:
             for j in range(1, 6):
                 vic = [j, 1]    # victory position
                 if possible.count(vic) == 1:
-                    toXY = vic
+                    to_xy = vic
                     quit = False
-                    return toXY
+                    return to_xy
                     break
             else:
                 return False
@@ -316,7 +310,7 @@ class Board:
 
     def hard_check_black_goes_on_white(self, from_xy):
         """
-        Gets move of black pawn onto white row as possible
+        Gets move on white row for black pawn as possible
         To prevent moving neutron by white player onto its row
         """
         for j in range(1, 6):
@@ -364,7 +358,6 @@ class Board:
             )
         from_xy = coordinates_moving[0]
         to_xy = coordinates_moving[1]
-        print(self.get_pawn_moves(from_xy[0], from_xy[1]))
         self.move_pawns(from_xy, to_xy, 0)
 
     def hard_make_move_neutron(self, figure, from_xy):
