@@ -1,4 +1,4 @@
-from classFigure import Figure
+from class_figure import Figure
 
 
 def test_define_empty_figure():

@@ -1,5 +1,5 @@
-from classFigure import Figure
-from classBoard import Board
+from class_figure import Figure
+from class_board import Board
 
 
 class Game:

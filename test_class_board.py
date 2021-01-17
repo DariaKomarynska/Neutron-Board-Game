@@ -1,7 +1,7 @@
-from classBoard import Board
-from classPawn import Pawn
-from classFigure import Figure
-from classEmpty import Empty
+from class_board import Board
+from class_pawn import Pawn
+from class_figure import Figure
+from class_empty import Empty
 
 
 def test_check_basic_elements():

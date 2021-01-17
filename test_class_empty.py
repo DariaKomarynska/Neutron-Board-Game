@@ -1,6 +1,6 @@
-from classEmpty import Empty
+from class_empty import Empty
 import pytest
-from classBoard import Board
+from class_board import Board
 from errors import MoveEmptyError
 
 

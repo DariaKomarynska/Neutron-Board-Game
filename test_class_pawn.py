@@ -1,8 +1,8 @@
-from classPawn import Pawn
+from class_pawn import Pawn
 import pytest
 from errors import NotIntegerError, IncorrectNumberError
-from classBoard import Board
-from classEmpty import Empty
+from class_board import Board
+from class_empty import Empty
 
 
 def test_create_pawn():

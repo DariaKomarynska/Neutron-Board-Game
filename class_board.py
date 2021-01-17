@@ -1,6 +1,6 @@
-from classEmpty import Empty
-from classFigure import Figure
-from classPawn import Pawn
+from class_empty import Empty
+from class_figure import Figure
+from class_pawn import Pawn
 from random import choice
 
 

@@ -1,4 +1,4 @@
-from classFigure import Figure
+from class_figure import Figure
 from errors import NotIntegerError, IncorrectNumberError
 
 
