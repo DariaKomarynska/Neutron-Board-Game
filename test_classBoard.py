@@ -27,7 +27,8 @@ def test_get_figure():
 
 def test_get_pawn_moves():
     board = Board()
-    assert board.get_pawn(1, 5).get_moves(board, 1, 5) == board.get_pawn_moves(1, 5)
+    assert board.get_pawn(1, 5).get_moves(
+        board, 1, 5) == board.get_pawn_moves(1, 5)
 
 
 def test_move_pawns_white():
@@ -419,7 +420,9 @@ def test_neutron_looks_moves_not_on_white():
     board._board[5][5] = Empty()
     board._board[2][5] = Pawn(1, 5, 2)
     result = board.neutron_looks_moves_not_on_white(possible)
-    assert result == [[1, 3], [5, 3], [3, 2], [3, 4], [2, 4], [4, 4], [2, 2], [4, 2]]
+    assert result == [
+        [1, 3], [5, 3], [3, 2], [3, 4], [2, 4], [4, 4], [2, 2], [4, 2]
+        ]
 
 
 def test_hard_check_black_goes_on_white_there_is_not():

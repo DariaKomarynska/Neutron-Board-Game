@@ -5,7 +5,6 @@ from random import choice
 
 
 class Board:
-
     def __init__(self):
         """
         Makes a gameboard 5*5 with figures
@@ -99,7 +98,7 @@ class Board:
         """Present a list of pawn's possible moves"""
         possible_moves = self.get_pawn_moves(start_xy[0], start_xy[1])
         print("HINTS")
-        return(f"Your possible moves: {possible_moves}")
+        return f"Your possible moves: {possible_moves}"
 
     def check_given_coordinates(self, coordinates):
         """
@@ -108,9 +107,8 @@ class Board:
         -Is input element digit?
         -Is an element 1-5?
         """
-        if (
-            (len(coordinates) == 2)
-            and (coordinates[0].isdigit() and coordinates[1].isdigit())
+        if (len(coordinates) == 2) and (
+            coordinates[0].isdigit() and coordinates[1].isdigit()
         ):
             coordinates[0] = int(coordinates[0])
             coordinates[1] = int(coordinates[1])
@@ -171,15 +169,11 @@ class Board:
         while quit:
             coord = self.input_coordinates(from_or_to)
             if (
-                (
-                    from_or_to == 1
-                    and self.check_given_coordinates(coord)
-                    and self.check_choosen_figure_on_the_board(
-                        figure, coord[0], coord[1]
-                    )
-                )
-                or (from_or_to == 0 and self.check_given_coordinates(coord))
-            ):
+                from_or_to == 1
+                and self.check_given_coordinates(coord)
+                and self.check_choosen_figure_on_the_board(
+                    figure, coord[0], coord[1])
+            ) or (from_or_to == 0 and self.check_given_coordinates(coord)):
                 quit = False
                 break
             else:
@@ -286,7 +280,7 @@ class Board:
         possible = possible_moves.copy()
         while quit:
             for j in range(1, 6):
-                vic = [j, 1]    # victory position
+                vic = [j, 1]  # victory position
                 if possible.count(vic) == 1:
                     to_xy = vic
                     quit = False
@@ -315,9 +309,9 @@ class Board:
         """
         for j in range(1, 6):
             on_white = [j, 5]
-            if self.get_pawn_moves(
+            if (self.get_pawn_moves(
                 from_xy[0], from_xy[1]
-            ).count(on_white) == 1:
+            ).count(on_white) == 1):
                 to_xy = on_white
                 return to_xy
         else:
@@ -354,8 +348,7 @@ class Board:
         Hard computer makes move of black pawn
         """
         coordinates_moving = self.hard_coordinates_start_end_black(
-            figure, from_xy
-            )
+            figure, from_xy)
         from_xy = coordinates_moving[0]
         to_xy = coordinates_moving[1]
         self.move_pawns(from_xy, to_xy, 0)

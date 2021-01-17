@@ -69,16 +69,12 @@ class Game:
             # Check: is input number correct?
             start = input("Your choice: ")
             print()
-            if (
-                len(start) == 1
-                and start.isdigit()
-            ):
+            if len(start) == 1 and start.isdigit():
                 # Check number of input elements
                 # Check: is input element digit?
                 start = int(start)
-                if (
-                    (start not in range(1, 6) and place == 1)
-                    or ((start not in range(2, 6) and start != 0) and place == 0)
+                if (start not in range(1, 6) and place == 1) or (
+                    (start not in range(2, 6) and start != 0) and place == 0
                 ):
                     print("Try again")
 
@@ -230,9 +226,13 @@ class Game:
         print("Write X and Y of pawn: two numbers from 1 to 5 with", "space")
         print()
         if version == 2 or version == 3:
-            self.game_two_people_light_2_3(version, white, black, neutron, black_won, white_won)
+            self.game_two_people_light_2_3(
+                version, white, black, neutron, black_won, white_won
+            )
         else:
-            self.game_with_hard_computer_4_5(version, white, black, neutron, black_won_hard, white_won_hard)
+            self.game_with_hard_computer_4_5(
+                version, white, black, neutron, black_won_hard, white_won_hard
+            )
 
     def start_rules_game(self):
         """
