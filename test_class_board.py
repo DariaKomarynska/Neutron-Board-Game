@@ -337,7 +337,7 @@ def test_random_from_xy_black(monkeypatch):
     def new_result(a):
         res = [3, 1]
         return res
-    monkeypatch.setattr('classBoard.choice', new_result)
+    monkeypatch.setattr('class_board.choice', new_result)
     result = board.random_from_xy(Figure.BLACK, 0)
     assert result == [3, 1]
 
@@ -348,7 +348,7 @@ def test_random_from_xy_white(monkeypatch):
     def new_result(a):
         res = [4, 5]
         return res
-    monkeypatch.setattr('classBoard.choice', new_result)
+    monkeypatch.setattr('class_board.choice', new_result)
     result = board.random_from_xy(Figure.WHITE, 0)
     assert result == [4, 5]
 
@@ -359,7 +359,7 @@ def test_random_to_xy_black(monkeypatch):
     def new_result(a):
         res = [4, 2]
         return res
-    monkeypatch.setattr('classBoard.choice', new_result)
+    monkeypatch.setattr('class_board.choice', new_result)
     from_xy = [4, 5]
     possible = board.get_pawn_moves(from_xy[0], from_xy[1])
     result = board.random_to_xy(Figure.WHITE, from_xy, 0, possible)
@@ -372,7 +372,7 @@ def test_random_to_xy_neutron(monkeypatch):
     def new_result(a):
         res = [1, 3]
         return res
-    monkeypatch.setattr('classBoard.choice', new_result)
+    monkeypatch.setattr('class_board.choice', new_result)
     from_xy = [3, 3]
     possible = board.get_pawn_moves(from_xy[0], from_xy[1])
     result = board.random_to_xy(Figure.NEUTRON, from_xy, 1, possible)
