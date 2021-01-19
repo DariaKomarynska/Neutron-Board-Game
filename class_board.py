@@ -63,16 +63,16 @@ class Board:
         player  : 1 if it is hard computer | 0 if another one
 
         """
-        a = self._board[xy_from[1]][xy_from[0]]
-        b = self._board[xy_to[1]][xy_to[0]]
+        start_coord_from = self._board[xy_from[1]][xy_from[0]]
+        start_coord_to = self._board[xy_to[1]][xy_to[0]]
         self._board[xy_to[1]][xy_to[0]] = self._board[xy_from[1]][xy_from[0]]
         self._board[xy_from[1]][xy_from[0]] = Empty()
         if self._board[xy_to[1]][xy_to[0]]._figure == 3 and player == 1:
             if self.check_neutron_next_step(xy_to):
                 return True
             else:
-                self._board[xy_from[1]][xy_from[0]] = a
-                self._board[xy_to[1]][xy_to[0]] = b
+                self._board[xy_from[1]][xy_from[0]] = start_coord_from
+                self._board[xy_to[1]][xy_to[0]] = start_coord_to
                 return False
 
     def input_coordinates(self, from_or_to):
